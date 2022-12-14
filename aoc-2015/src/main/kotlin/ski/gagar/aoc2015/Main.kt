@@ -24,6 +24,8 @@ import ski.gagar.aoc2015.day19.part1.day19Part1
 import ski.gagar.aoc2015.day19.part2.day19Part2
 import ski.gagar.aoc2015.day2.part1.day2Part1
 import ski.gagar.aoc2015.day2.part2.day2Part2
+import ski.gagar.aoc2015.day20.part1.day20Part1
+import ski.gagar.aoc2015.day20.part2.day20Part2
 import ski.gagar.aoc2015.day3.part1.day3Part1
 import ski.gagar.aoc2015.day3.part2.day3Part2
 import ski.gagar.aoc2015.day4.part1.day4Part1
@@ -77,5 +79,7 @@ fun main() {
 //    day18Part1()
 //    day18Part2()
 //    day19Part1()
-    day19Part2()
+//    day19Part2()
+    day20Part1()
+    day20Part2()
 }
