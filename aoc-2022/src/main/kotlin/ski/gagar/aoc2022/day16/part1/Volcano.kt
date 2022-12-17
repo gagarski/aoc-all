@@ -1,12 +1,10 @@
 package ski.gagar.aoc2022.day16.part1
 
-import kotlinx.collections.immutable.PersistentSet
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
 import org.codehaus.jparsec.Parsers
 import org.codehaus.jparsec.Scanners
 import org.codehaus.jparsec.Terminals
 import ski.gagar.aoc.util.getResourceAsStream
+import java.util.*
 
 data class VolcanoNode(val name: String, val flowRate: Int, val neighbors: List<String>)
 
@@ -19,103 +17,129 @@ object OpenCurrentValve : Move {
 
 data class CourseOfAction(val moves: List<Move>, val result: Int)
 
-private data class State(
-    val currentCourse: CourseOfAction,
-    val currentNode: VolcanoNode,
-    val openedValves: PersistentSet<String>,
-    val movesLeft: Int,
-    val allNodes: Map<String, VolcanoNode>
-)
+data class ShortestPath(val path: List<Move>, val length: Int)
 
-private data class NextMoveAndState(val move: Move, val state: State)
+data class ShortestPaths(val from: String, val lengths: Map<String, Int>, val predecessors: Map<String, String>) {
+    fun to(to: String): ShortestPath {
+        val length = lengths[to]!!
+        val path = mutableListOf<Move>()
+        var current: String = to
+        while (current != from) {
+            path.add(GoTo(current))
+            current = predecessors[current]!!
+        }
 
-private fun State.possibleMoves(): Sequence<NextMoveAndState> = sequence {
-    if (currentNode.name !in openedValves && currentNode.flowRate != 0) {
-        yield(NextMoveAndState(OpenCurrentValve, this@possibleMoves))
-    }
-
-    for (neighbor in currentNode.neighbors) {
-        yield(NextMoveAndState(GoTo(neighbor), this@possibleMoves))
+        return ShortestPath(path.reversed(), length)
     }
 }
 
-private fun NextMoveAndState.apply(): State {
-    val nextMoves = state.currentCourse.moves + move
-    val newMovesLeft = state.movesLeft - 1
-    return when (move) {
-        is OpenCurrentValve -> {
-            val newCourse = CourseOfAction(
-                nextMoves, state.currentCourse.result + newMovesLeft * state.currentNode.flowRate
-            )
-            State(
-                newCourse,
-                state.currentNode,
-                state.openedValves.add(state.currentNode.name),
-                newMovesLeft,
-                state.allNodes
-            )
+private class VolcanoGraph(nodes: List<VolcanoNode>) {
+    val nodes = nodes.associateBy { it.name }
+
+    fun shortestPaths(from: String): ShortestPaths {
+        val lengths = mutableMapOf<String, Int>()
+        val predecessors = mutableMapOf<String, String>()
+        val visited = mutableSetOf<String>()
+        val queue = PriorityQueue<Pair<String, Int>>(Comparator.comparing { it.second })
+
+        lengths[from] = 0
+
+        queue.add(from to lengths[from]!!)
+
+        while (queue.isNotEmpty()) {
+            val (current, weight) = queue.remove()
+
+            if (current in visited) {
+                continue
+            }
+
+            visited.add(current)
+
+            val currentNode = nodes[current]!!
+
+            for (neighbor in currentNode.neighbors) {
+                val currentLengthNeighour = lengths[neighbor]
+                val newLength = lengths[current]!! + 1
+
+                if (currentLengthNeighour == null || newLength < currentLengthNeighour) {
+                    lengths[neighbor] = newLength
+                    predecessors[neighbor] = current
+                }
+                queue.add(neighbor to newLength)
+            }
         }
-        is GoTo -> {
-            val newCourse = CourseOfAction(nextMoves, state.currentCourse.result)
-            val nextNode = state.allNodes[move.nextNode]
-            check(nextNode != null)
-            State(
-                newCourse,
-                nextNode,
-                state.openedValves,
-                newMovesLeft,
-                state.allNodes
-            )
-        }
+
+        return ShortestPaths(from, lengths, predecessors)
     }
 }
 
 fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit: Int = 30): CourseOfAction? {
-    val byName = nodes.associateBy { it.name }
+    var remainingLimit = limit
+    val graph = VolcanoGraph(nodes)
+    val withPositiveFlowRate = nodes.filter { it.flowRate > 0 }.toSet()
+    val openedValves = mutableSetOf<String>()
+    val result = mutableListOf<Move>()
 
-    val start = byName[startNode]
+    var currentShortestPaths = graph.shortestPaths(startNode)
+    val steps = mutableListOf<Move>()
+    var currentGain = 0
 
-    check(start != null)
+    while (remainingLimit != 0) {
+        val toConsider =
+            withPositiveFlowRate.filter { it.name !in openedValves && currentShortestPaths.lengths[it.name]!! < remainingLimit + 1 }
 
-    val stack = ArrayDeque<NextMoveAndState>()
-    val startCourse = CourseOfAction(persistentListOf(), 0)
-    val startState = State(startCourse, start, persistentSetOf(), limit, byName)
+        var nextNode: String? = null
+        var maxGain: Int? = null
+        var newShortestPaths: ShortestPaths? = null
 
-    for (move in startState.possibleMoves()) {
-        stack.addLast(move)
+        for (nodeWithValve in toConsider) {
+            val shortestPathsCandidate = graph.shortestPaths(nodeWithValve.name)
+
+            val losses = toConsider
+                .asSequence()
+                .map { it.name }
+                .filter { it != nodeWithValve.name }
+                .map {
+                    it to (currentShortestPaths.lengths[nodeWithValve.name]!! + 1 + shortestPathsCandidate.lengths[it]!! - currentShortestPaths.lengths[it]!!) * graph.nodes[it]!!.flowRate
+                }
+                .toList()
+
+//            val condGains = toConsider
+//                .asSequence()
+//                .map { it.name }
+//                .filter { it != nodeWithValve.name }
+//                .map {
+//                    it to (remainingLimit - shortestPathsCandidate.lengths[it]!! - 1) * graph.nodes[it]!!.flowRate
+//                }
+//                .toList()
+            val gain = (remainingLimit - currentShortestPaths.lengths[nodeWithValve.name]!! - 1) * (graph.nodes[nodeWithValve.name]!!.flowRate)
+            val totalGain = gain - losses.sumOf { it.second }
+
+            if (maxGain == null || totalGain > maxGain) {
+                maxGain = totalGain
+                nextNode = nodeWithValve.name
+                newShortestPaths = shortestPathsCandidate
+            }
+        }
+
+        if (nextNode == null) {
+            return CourseOfAction(result, currentGain)
+        }
+
+        val toTravel = currentShortestPaths.to(nextNode)
+        currentGain += (remainingLimit - toTravel.length - 1) * graph.nodes[nextNode]!!.flowRate
+        steps.addAll(toTravel.path)
+        currentShortestPaths = newShortestPaths!!
+        openedValves.add(nextNode)
+        result.addAll(toTravel.path)
+        result.add(OpenCurrentValve)
+        remainingLimit -= (toTravel.length + 1)
     }
 
-    var bestCourseSoFar: CourseOfAction? = null
+    return CourseOfAction(steps, currentGain)
 
-    while (stack.isNotEmpty()) {
-        val move = stack.removeFirst()
-
-        if (move.state.movesLeft == 0) {
-            if ((bestCourseSoFar == null || bestCourseSoFar.result < move.state.currentCourse.result)) {
-                bestCourseSoFar = move.state.currentCourse
-            }
-            continue
-        }
-
-        val nextState = move.apply()
-
-        var added = false
-
-        for (nextMove in nextState.possibleMoves()) {
-            stack.addLast(nextMove)
-            added = true
-        }
-
-        if (!added) {
-            if ((bestCourseSoFar == null || bestCourseSoFar.result < move.state.currentCourse.result)) {
-                bestCourseSoFar = move.state.currentCourse
-            }
-        }
-    }
-
-    return bestCourseSoFar
 }
-
+// Вычислим кол-во пробелов перед выражением "-$subtrahend" ОТНОСИТЕЛЬНО minuend
 object VolcanoParser {
     private val NON_BR_WHITESPACES = setOf(' ', '\t')
     private val WHITESPACES = Scanners.isChar { it in NON_BR_WHITESPACES }.skipMany()
@@ -124,6 +148,7 @@ object VolcanoParser {
     private const val COMMA = ","
     private const val EQ = "="
     private const val NL = "\n"
+    private const val NL_WIN = "\r\n"
 
     private const val CAPITAL_VALVE = "Valve"
     private const val HAS = "has"
@@ -138,7 +163,7 @@ object VolcanoParser {
     private const val VALVE = "valve"
 
     private val TERMINALS =
-        Terminals.operators(SEMICOLON, COMMA, EQ, NL)
+        Terminals.operators(SEMICOLON, COMMA, EQ, NL, NL_WIN)
             .words(Scanners.IDENTIFIER)
             .keywords(
                 CAPITAL_VALVE,
@@ -162,6 +187,11 @@ object VolcanoParser {
     )
 
     private val FLOW_RATE = Terminals.IntegerLiteral.PARSER.map { it.toInt() }
+
+    private val NEWLINE = Parsers.or(
+        TERMINALS.token(NL),
+        TERMINALS.token(NL_WIN)
+    )
 
     private val SINGLE_VALVE = Terminals.identifier()
     private val LIST_OF_VALVES = SINGLE_VALVE.sepBy(TERMINALS.token(COMMA))
@@ -200,9 +230,17 @@ object VolcanoParser {
         VolcanoNode(name = name, flowRate = flowRate, neighbors = valves)
     }
 
-    private val VOLCANO_NODES = VOLCANO_NODE.sepBy(TERMINALS.token(NL))
+    private val VOLCANO_NODES = VOLCANO_NODE.sepBy(NEWLINE)
 
-    fun parse(str: String) = VOLCANO_NODES.from(TOKENIZER, WHITESPACES).parse(str)
+    private val VOLCANO_NODES_WITH_NL = Parsers.sequence(
+        NEWLINE.many(),
+        VOLCANO_NODES,
+        NEWLINE.many()
+    ) { _, nodes, _ ->
+        nodes
+    }
+
+    fun parse(str: String) = VOLCANO_NODES_WITH_NL.from(TOKENIZER, WHITESPACES).parse(str)
 }
 
 fun day16Part1() {
@@ -211,6 +249,6 @@ fun day16Part1() {
             VolcanoParser.parse(
                 getResourceAsStream("/ski.gagar.aoc.aoc2022.day16/volcano.txt").bufferedReader().readText()
             )
-        )?.result
+        )
     }")
 }

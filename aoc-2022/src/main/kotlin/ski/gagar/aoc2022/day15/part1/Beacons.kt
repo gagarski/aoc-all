@@ -5,6 +5,7 @@ import org.codehaus.jparsec.Scanners
 import org.codehaus.jparsec.Terminals
 import org.codehaus.jparsec.Tokens
 import ski.gagar.aoc.util.getResourceAsStream
+import ski.gagar.aoc2022.day11.part1.MonkeyParser
 import java.util.BitSet
 import kotlin.math.absoluteValue
 
@@ -63,10 +64,12 @@ object BeaconParser {
     private val COMMA = ","
     private val COLON = ":"
     private val NL = "\n"
+    private val NL_WIN = "\r\n"
+
 
     private val NON_BR_WHITESPACES = setOf(' ', '\t')
     private val TERMINALS = Terminals
-        .operators(EQ, MINUS, COMMA, COLON, NL)
+        .operators(EQ, MINUS, COMMA, COLON, NL, NL_WIN)
         .words(Scanners.IDENTIFIER)
         .keywords(
             CAPITAL_SENSOR,
@@ -79,6 +82,11 @@ object BeaconParser {
         )
         .build()
     private val INT_TOKENIZER = Terminals.IntegerLiteral.TOKENIZER
+    private val NEWLINE = Parsers.or(
+        TERMINALS.token(NL),
+        TERMINALS.token(NL_WIN)
+    )
+
     private val POS_INTEGER = Terminals.IntegerLiteral.PARSER.map { int ->
         int.toInt().also {
             check(it >= 0)
@@ -136,7 +144,15 @@ object BeaconParser {
         ClosestBeacon(sensor, beacon)
     }
 
-    private val CLOSEST_BEACONS = CLOSEST_BEACON.sepBy(TERMINALS.token(NL))
+    private val CLOSEST_BEACONS = CLOSEST_BEACON.sepBy(NEWLINE)
+
+    private val CLOSEST_BEACONS_WITH_NL = Parsers.sequence(
+        NEWLINE.many(),
+        CLOSEST_BEACONS,
+        NEWLINE.many()
+    ) { _, it, _ ->
+        it
+    }
 
     fun parse(str: String) = CLOSEST_BEACONS.from(TOKENIZER, WHITESPACES).parse(str)
 }
