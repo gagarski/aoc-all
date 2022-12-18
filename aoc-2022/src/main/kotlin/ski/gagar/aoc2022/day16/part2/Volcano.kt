@@ -48,17 +48,17 @@ private fun State.possibleMoves(): Sequence<NextMoveAndState> = sequence {
     val myNeighbors = reducedGraph.getEdgesFrom(myCurrentNode)
     val elephantNeighbors = reducedGraph.getEdgesFrom(elephantCurrentNode)
 
-
-    for ((to, edge) in elephantNeighbors) {
-        if (to in visitedNodes) continue
-        if (elephantMovesLeft < edge.weight) continue
-        yield(NextMoveAndState(ElephantMove(to), this@possibleMoves))
-    }
-
     for ((to, edge) in myNeighbors) {
         if (to in visitedNodes) continue
         if (myMovesLeft < edge.weight) continue
         yield(NextMoveAndState(MyMove(to), this@possibleMoves))
+    }
+
+    for ((to, edge) in elephantNeighbors) {
+        if (to in visitedNodes) continue
+        if (elephantMovesLeft < edge.weight) continue
+        if (myNeighbors.isNotEmpty() && elephantMovesLeft - edge.weight - 1 < myMovesLeft) continue
+        yield(NextMoveAndState(ElephantMove(to), this@possibleMoves))
     }
 }
 
@@ -194,4 +194,5 @@ fun day16Part2() {
             )
         )
     }")
+    println(ctr)
 }
