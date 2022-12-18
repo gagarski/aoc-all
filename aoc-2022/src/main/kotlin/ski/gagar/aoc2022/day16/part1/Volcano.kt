@@ -1,8 +1,15 @@
 package ski.gagar.aoc2022.day16.part1
 
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.PersistentMap
+import kotlinx.collections.immutable.PersistentSet
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import org.codehaus.jparsec.Parsers
 import org.codehaus.jparsec.Scanners
 import org.codehaus.jparsec.Terminals
+import ski.gagar.aoc.util.Graph
+import ski.gagar.aoc.util.GraphBuilder
 import ski.gagar.aoc.util.getResourceAsStream
 import java.util.*
 
@@ -73,73 +80,128 @@ private class VolcanoGraph(nodes: List<VolcanoNode>) {
     }
 }
 
+private data class ReducedMove(val to: String)
+
+private data class State(
+    val moves: PersistentList<Move>,
+    val result: Int,
+    val currentNode: String,
+    val visitedNodes: PersistentSet<String>,
+    val openedValves: PersistentSet<String>,
+    val movesLeft: Int,
+    val allNodes: Map<String, VolcanoNode>,
+    val reducedGraph: Graph,
+    val expansions: Map<Pair<String, String>, ShortestPath>
+) {
+    val nonZeroNodes = allNodes.values.count { it.flowRate > 0 }
+}
+
+private data class NextMoveAndState(val move: ReducedMove, val state: State)
+
+private fun State.possibleMoves(): Sequence<NextMoveAndState> = sequence {
+    for ((to, edge) in reducedGraph.getEdgesFrom(currentNode)) {
+        val neighborNode = allNodes[to]
+        check(neighborNode != null)
+        if (to in visitedNodes) continue
+
+        if (edge.weight + 1 > movesLeft) continue
+        yield(NextMoveAndState(ReducedMove(to), this@possibleMoves))
+    }
+}
+
+
+private fun NextMoveAndState.apply(): State {
+    val path = state.expansions[state.currentNode to move.to]!!
+    val toNode = state.allNodes[move.to]!!
+    val nextMoves = state.moves.addAll(path.path).add(OpenCurrentValve)
+
+    val newMovesLeft = state.movesLeft - path.length - 1
+    return State(
+        nextMoves,
+        state.result + newMovesLeft * toNode.flowRate,
+        move.to,
+        state.visitedNodes.add(state.currentNode),
+        state.openedValves.add(move.to),
+        newMovesLeft,
+        state.allNodes,
+        state.reducedGraph,
+        state.expansions
+    )
+}
+
 fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit: Int = 30): CourseOfAction? {
-    var remainingLimit = limit
     val graph = VolcanoGraph(nodes)
-    val withPositiveFlowRate = nodes.filter { it.flowRate > 0 }.toSet()
-    val openedValves = mutableSetOf<String>()
-    val result = mutableListOf<Move>()
+    val meaningfulNodes = nodes.asSequence().filter { it.flowRate > 0 || it.name == startNode }.toSet()
 
-    var currentShortestPaths = graph.shortestPaths(startNode)
-    val steps = mutableListOf<Move>()
-    var currentGain = 0
+    val expansions = mutableMapOf<Pair<String, String>, ShortestPath>()
 
-    while (remainingLimit != 0) {
-        val toConsider =
-            withPositiveFlowRate.filter { it.name !in openedValves && currentShortestPaths.lengths[it.name]!! < remainingLimit + 1 }
+    for (node in meaningfulNodes) {
+        val paths = graph.shortestPaths(node.name)
 
-        var nextNode: String? = null
-        var maxGain: Int? = null
-        var newShortestPaths: ShortestPaths? = null
+        for (node2 in meaningfulNodes) {
+            if (node2.name == node.name)
+                continue
 
-        for (nodeWithValve in toConsider) {
-            val shortestPathsCandidate = graph.shortestPaths(nodeWithValve.name)
+            val path = paths.to(node2.name)
 
-            val losses = toConsider
-                .asSequence()
-                .map { it.name }
-                .filter { it != nodeWithValve.name }
-                .map {
-                    it to (currentShortestPaths.lengths[nodeWithValve.name]!! + 1 + shortestPathsCandidate.lengths[it]!! - currentShortestPaths.lengths[it]!!) * graph.nodes[it]!!.flowRate
-                }
-                .toList()
-
-//            val condGains = toConsider
-//                .asSequence()
-//                .map { it.name }
-//                .filter { it != nodeWithValve.name }
-//                .map {
-//                    it to (remainingLimit - shortestPathsCandidate.lengths[it]!! - 1) * graph.nodes[it]!!.flowRate
-//                }
-//                .toList()
-            val gain = (remainingLimit - currentShortestPaths.lengths[nodeWithValve.name]!! - 1) * (graph.nodes[nodeWithValve.name]!!.flowRate)
-            val totalGain = gain - losses.sumOf { it.second }
-
-            if (maxGain == null || totalGain > maxGain) {
-                maxGain = totalGain
-                nextNode = nodeWithValve.name
-                newShortestPaths = shortestPathsCandidate
-            }
+            expansions[node.name to node2.name] = path
         }
-
-        if (nextNode == null) {
-            return CourseOfAction(result, currentGain)
-        }
-
-        val toTravel = currentShortestPaths.to(nextNode)
-        currentGain += (remainingLimit - toTravel.length - 1) * graph.nodes[nextNode]!!.flowRate
-        steps.addAll(toTravel.path)
-        currentShortestPaths = newShortestPaths!!
-        openedValves.add(nextNode)
-        result.addAll(toTravel.path)
-        result.add(OpenCurrentValve)
-        remainingLimit -= (toTravel.length + 1)
     }
 
-    return CourseOfAction(steps, currentGain)
+    val bld = GraphBuilder()
+
+    for (node in meaningfulNodes) {
+        bld.addVertex(node.name)
+    }
+
+    for ((k, path) in expansions) {
+        val (from, to) = k
+        bld.addEdge(from, to, path.length)
+    }
+
+    val reducedGraph = bld.build()
+
+    val stack = ArrayDeque<NextMoveAndState>()
+    val startState = State(persistentListOf(), 0, startNode, persistentSetOf(), persistentSetOf(),
+        limit, graph.nodes, reducedGraph, expansions)
+
+    for (move in startState.possibleMoves()) {
+        stack.addLast(move)
+    }
+    var bestStateSoFar: State? = null
+
+    while (stack.isNotEmpty()) {
+        val move = stack.removeFirst()
+
+        if (move.state.movesLeft == 0) {
+            if ((bestStateSoFar == null || bestStateSoFar.result < move.state.result)) {
+                bestStateSoFar = move.state
+            }
+            continue
+        }
+
+        val nextState = move.apply()
+
+        var added = false
+
+        for (nextMove in nextState.possibleMoves()) {
+            stack.addLast(nextMove)
+            added = true
+        }
+
+        if (!added) {
+            if ((bestStateSoFar == null || bestStateSoFar.result < nextState.result)) {
+                bestStateSoFar = nextState
+            }
+        }
+    }
+
+    return bestStateSoFar?.let {
+        CourseOfAction(it.moves, it.result)
+    }
 
 }
-// Вычислим кол-во пробелов перед выражением "-$subtrahend" ОТНОСИТЕЛЬНО minuend
+
 object VolcanoParser {
     private val NON_BR_WHITESPACES = setOf(' ', '\t')
     private val WHITESPACES = Scanners.isChar { it in NON_BR_WHITESPACES }.skipMany()

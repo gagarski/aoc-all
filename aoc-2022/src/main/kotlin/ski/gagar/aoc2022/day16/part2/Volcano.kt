@@ -1,16 +1,16 @@
-package ski.gagar.aoc2022.day16.part1.bruteforce
+package ski.gagar.aoc2022.day16.part2
 
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.persistentSetOf
 import org.codehaus.jparsec.Parsers
 import org.codehaus.jparsec.Scanners
 import org.codehaus.jparsec.Terminals
+import ski.gagar.aoc.util.Graph
+import ski.gagar.aoc.util.GraphBuilder
 import ski.gagar.aoc.util.getResourceAsStream
-import ski.gagar.aoc2022.day15.part1.BeaconParser
+import java.util.*
 
 data class VolcanoNode(val name: String, val flowRate: Int, val neighbors: List<String>)
 
@@ -23,80 +23,150 @@ object OpenCurrentValve : Move {
 
 data class CourseOfAction(val moves: List<Move>, val result: Int)
 
+data class ShortestPath(val path: List<Move>, val length: Int)
+
+data class ShortestPaths(val from: String, val lengths: Map<String, Int>, val predecessors: Map<String, String>) {
+    fun to(to: String): ShortestPath {
+        val length = lengths[to]!!
+        val path = mutableListOf<Move>()
+        var current: String = to
+        while (current != from) {
+            path.add(GoTo(current))
+            current = predecessors[current]!!
+        }
+
+        return ShortestPath(path.reversed(), length)
+    }
+}
+
+private class VolcanoGraph(nodes: List<VolcanoNode>) {
+    val nodes = nodes.associateBy { it.name }
+
+    fun shortestPaths(from: String): ShortestPaths {
+        val lengths = mutableMapOf<String, Int>()
+        val predecessors = mutableMapOf<String, String>()
+        val visited = mutableSetOf<String>()
+        val queue = PriorityQueue<Pair<String, Int>>(Comparator.comparing { it.second })
+
+        lengths[from] = 0
+
+        queue.add(from to lengths[from]!!)
+
+        while (queue.isNotEmpty()) {
+            val (current, weight) = queue.remove()
+
+            if (current in visited) {
+                continue
+            }
+
+            visited.add(current)
+
+            val currentNode = nodes[current]!!
+
+            for (neighbor in currentNode.neighbors) {
+                val currentLengthNeighour = lengths[neighbor]
+                val newLength = lengths[current]!! + 1
+
+                if (currentLengthNeighour == null || newLength < currentLengthNeighour) {
+                    lengths[neighbor] = newLength
+                    predecessors[neighbor] = current
+                }
+                queue.add(neighbor to newLength)
+            }
+        }
+
+        return ShortestPaths(from, lengths, predecessors)
+    }
+}
+
+private data class ReducedMove(val to: String)
+
 private data class State(
     val moves: PersistentList<Move>,
     val result: Int,
-    val currentNode: VolcanoNode,
+    val currentNode: String,
+    val visitedNodes: PersistentSet<String>,
     val openedValves: PersistentSet<String>,
     val movesLeft: Int,
-    val nVisits: PersistentMap<String, Int>,
-    val allNodes: Map<String, VolcanoNode>
+    val allNodes: Map<String, VolcanoNode>,
+    val reducedGraph: Graph,
+    val expansions: Map<Pair<String, String>, ShortestPath>
 ) {
     val nonZeroNodes = allNodes.values.count { it.flowRate > 0 }
 }
 
-private data class NextMoveAndState(val move: Move, val state: State)
+private data class NextMoveAndState(val move: ReducedMove, val state: State)
 
 private fun State.possibleMoves(): Sequence<NextMoveAndState> = sequence {
-    if (currentNode.name !in openedValves && currentNode.flowRate != 0) {
-        yield(NextMoveAndState(OpenCurrentValve, this@possibleMoves))
-    }
-
-
-
-    for (neighbor in currentNode.neighbors) {
-        val neighborNode = allNodes[neighbor]
+    for ((to, edge) in reducedGraph.getEdgesFrom(currentNode)) {
+        val neighborNode = allNodes[to]
         check(neighborNode != null)
-        if ((nVisits[neighbor] ?: 0) >= neighborNode.neighbors.size) continue
-        yield(NextMoveAndState(GoTo(neighbor), this@possibleMoves))
+        if (to in visitedNodes) continue
+
+        if (edge.weight + 1 > movesLeft) continue
+        yield(NextMoveAndState(ReducedMove(to), this@possibleMoves))
     }
 }
 
+
 private fun NextMoveAndState.apply(): State {
-    val nextMoves = state.moves.add(move)
-    val newMovesLeft = state.movesLeft - 1
-    return when (move) {
-        is OpenCurrentValve -> {
-            State(
-                nextMoves,
-                state.result + newMovesLeft * state.currentNode.flowRate,
-                state.currentNode,
-                state.openedValves.add(state.currentNode.name),
-                newMovesLeft,
-                state.nVisits,
-                state.allNodes
-            )
-        }
-        is GoTo -> {
-            val nextNode = state.allNodes[move.nextNode]
-            check(nextNode != null)
-            State(
-                nextMoves,
-                state.result,
-                nextNode,
-                state.openedValves,
-                newMovesLeft,
-                state.nVisits.put(nextNode.name, (state.nVisits[nextNode.name] ?: 0) + 1),
-                state.allNodes
-            )
-        }
-    }
+    val path = state.expansions[state.currentNode to move.to]!!
+    val toNode = state.allNodes[move.to]!!
+    val nextMoves = state.moves.addAll(path.path).add(OpenCurrentValve)
+
+    val newMovesLeft = state.movesLeft - path.length - 1
+    return State(
+        nextMoves,
+        state.result + newMovesLeft * toNode.flowRate,
+        move.to,
+        state.visitedNodes.add(state.currentNode),
+        state.openedValves.add(move.to),
+        newMovesLeft,
+        state.allNodes,
+        state.reducedGraph,
+        state.expansions
+    )
 }
 
 fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit: Int = 30): CourseOfAction? {
-    val byName = nodes.associateBy { it.name }
+    val graph = VolcanoGraph(nodes)
+    val meaningfulNodes = nodes.asSequence().filter { it.flowRate > 0 || it.name == startNode }.toSet()
 
-    val start = byName[startNode]
+    val expansions = mutableMapOf<Pair<String, String>, ShortestPath>()
 
-    check(start != null)
+    for (node in meaningfulNodes) {
+        val paths = graph.shortestPaths(node.name)
+
+        for (node2 in meaningfulNodes) {
+            if (node2.name == node.name)
+                continue
+
+            val path = paths.to(node2.name)
+
+            expansions[node.name to node2.name] = path
+        }
+    }
+
+    val bld = GraphBuilder()
+
+    for (node in meaningfulNodes) {
+        bld.addVertex(node.name)
+    }
+
+    for ((k, path) in expansions) {
+        val (from, to) = k
+        bld.addEdge(from, to, path.length)
+    }
+
+    val reducedGraph = bld.build()
 
     val stack = ArrayDeque<NextMoveAndState>()
-    val startState = State(persistentListOf(), 0, start, persistentSetOf(), limit, persistentMapOf(startNode to 1), byName)
+    val startState = State(persistentListOf(), 0, startNode, persistentSetOf(), persistentSetOf(),
+        limit, graph.nodes, reducedGraph, expansions)
 
     for (move in startState.possibleMoves()) {
         stack.addLast(move)
     }
-
     var bestStateSoFar: State? = null
 
     while (stack.isNotEmpty()) {
@@ -119,8 +189,8 @@ fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit
         }
 
         if (!added) {
-            if ((bestStateSoFar == null || bestStateSoFar.result < move.state.result)) {
-                bestStateSoFar = move.state
+            if ((bestStateSoFar == null || bestStateSoFar.result < nextState.result)) {
+                bestStateSoFar = nextState
             }
         }
     }
@@ -128,6 +198,7 @@ fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit
     return bestStateSoFar?.let {
         CourseOfAction(it.moves, it.result)
     }
+
 }
 
 object VolcanoParser {
@@ -239,6 +310,6 @@ fun day16Part1() {
             VolcanoParser.parse(
                 getResourceAsStream("/ski.gagar.aoc.aoc2022.day16/volcano.txt").bufferedReader().readText()
             )
-        )?.result
+        )
     }")
 }

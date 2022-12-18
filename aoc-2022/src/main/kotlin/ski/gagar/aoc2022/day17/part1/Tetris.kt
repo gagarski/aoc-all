@@ -1,8 +1,6 @@
 package ski.gagar.aoc2022.day17.part1
 
 import ski.gagar.aoc.util.getResourceAsStream
-import ski.gagar.aoc2022.day16.part1.bruteforce.VolcanoParser
-import ski.gagar.aoc2022.day16.part1.bruteforce.bestCourseOfAction
 import java.util.BitSet
 
 
