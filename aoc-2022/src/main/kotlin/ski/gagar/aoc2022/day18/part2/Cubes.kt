@@ -24,9 +24,7 @@ class UnionFind(private val size: Int) {
 
         if (pId == qId) return
 
-        if (pId == p) {
-            ids[p] = q
-        }
+        ids[pId] = qId
 
         for ((k, v) in ids) {
             if (v == pId) ids[k] = qId
@@ -66,7 +64,7 @@ class CubeGrid(val cubes: Set<Cube>) {
         for (z in 0 until zSize) {
             for (y in 0 until ySize) {
                 for (x in 0 until xSize) {
-                    if (Cube(x, y, z) !in cubes) {
+                    if (Cube(x + xOffset, y + yOffset, z + zOffset) !in cubes) {
                         openAndConnect(x, y, z)
                     }
                 }
