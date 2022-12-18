@@ -38,7 +38,7 @@ fun main() {
 //    day14Part2()
 //    day15Part1()
 //    day15Part2()
-//    day16Part1()
+    day16Part1()
     day16Part2()
 //    day17Part1()
 //    day17Part2()

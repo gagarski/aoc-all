@@ -62,6 +62,14 @@ private fun State.possibleMoves(): Sequence<NextMoveAndState> = sequence {
     }
 }
 
+private val State.potentialGain
+    get() = reducedGraph.getEdgesFrom(myCurrentNode).values
+        .filter { it.to !in openedValves && it.weight + 1 < myMovesLeft }
+        .sumOf { (myMovesLeft - it.weight - 1) * allNodes[it.to]!!.flowRate } +
+            reducedGraph.getEdgesFrom(elephantCurrentNode).values
+                .filter { it.to !in openedValves && it.weight + 1 < elephantMovesLeft }
+                .sumOf { (elephantMovesLeft - it.weight - 1) * allNodes[it.to]!!.flowRate }
+
 private fun NextMoveAndState.apply(): State = when (move) {
     is ElephantMove -> {
         val path = state.expansions[state.elephantCurrentNode to move.to]!!
@@ -159,11 +167,19 @@ fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit
         stack.addLast(move)
     }
     var bestStateSoFar: State? = null
+    var i = 0
+    var real = 0
 
     while (stack.isNotEmpty()) {
-        val move = stack.removeFirst()
+        i++
+
+        val move = stack.removeLast()
 
         val nextState = move.apply()
+
+        if (nextState.potentialGain + nextState.result < (bestStateSoFar?.result ?: 0)) continue
+
+        real++
 
         var added = false
 
@@ -178,7 +194,6 @@ fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit
             }
         }
     }
-
     return bestStateSoFar?.let {
         CourseOfAction(it.myMoves, it.elephantMoves, it.result)
     }
@@ -192,7 +207,6 @@ fun day16Part2() {
             VolcanoParser.parse(
                 getResourceAsStream("/ski.gagar.aoc.aoc2022.day16/volcano.txt").bufferedReader().readText()
             )
-        )
+        )?.result
     }")
-    println(ctr)
 }

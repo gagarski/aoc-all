@@ -168,7 +168,10 @@ fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit
     }
     var bestStateSoFar: State? = null
 
+    var i = 0
+
     while (stack.isNotEmpty()) {
+        i++
         val move = stack.removeFirst()
 
         if (move.state.movesLeft == 0) {
@@ -309,6 +312,6 @@ fun day16Part1() {
             VolcanoParser.parse(
                 getResourceAsStream("/ski.gagar.aoc.aoc2022.day16/volcano.txt").bufferedReader().readText()
             )
-        )
+        )?.result
     }")
 }
