@@ -107,10 +107,10 @@ data class State(
         res
     }
 
-    private fun Robot.hasMovementTowards(): Boolean {
+    private fun Robot.canBeReached(): Boolean {
         val increase = priceIncreasePerMove
-        return price.amounts.keys.all {
-            (increase[it] ?: 0) > 0
+        return price.amounts.all { (k, v) ->
+            (wallet.amounts[k] ?: 0) + (increase[k] ?: 0) * (stepsLeft) >= v
         }
     }
 
@@ -140,7 +140,7 @@ data class State(
             !wallet.canAfford(v.price)
         }
 
-        if (targetRobot.hasMovementTowards() || nonAffordable.values.any { it.hasMovementTowards() }) {
+        if (targetRobot.canBeReached() || nonAffordable.values.any { it.canBeReached() }) {
             yield(DoNothing(newAffordable))
         }
 
@@ -229,7 +229,6 @@ fun List<Blueprint>.quality(
     var q = 0
 
     for (bp in this) {
-        println(bp.id)
         q += bp.id * (bp.bestCourseOfAction(limit, initialRobots, targetCurrency).result.amounts[targetCurrency] ?: 0)
     }
 
