@@ -40,7 +40,7 @@ data class ShortestPaths(val from: String, val lengths: Map<String, Int>, val pr
     }
 }
 
-private class VolcanoGraph(nodes: List<VolcanoNode>) {
+class VolcanoGraph(nodes: List<VolcanoNode>) {
     val nodes = nodes.associateBy { it.name }
 
     fun shortestPaths(from: String): ShortestPaths {
@@ -92,9 +92,7 @@ private data class State(
     val allNodes: Map<String, VolcanoNode>,
     val reducedGraph: Graph,
     val expansions: Map<Pair<String, String>, ShortestPath>
-) {
-    val nonZeroNodes = allNodes.values.count { it.flowRate > 0 }
-}
+)
 
 private data class NextMoveAndState(val move: ReducedMove, val state: State)
 
@@ -170,7 +168,10 @@ fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit
     }
     var bestStateSoFar: State? = null
 
+    var i = 0
+
     while (stack.isNotEmpty()) {
+        i++
         val move = stack.removeFirst()
 
         if (move.state.movesLeft == 0) {
@@ -311,6 +312,6 @@ fun day16Part1() {
             VolcanoParser.parse(
                 getResourceAsStream("/ski.gagar.aoc.aoc2022.day16/volcano.txt").bufferedReader().readText()
             )
-        )
+        )?.result
     }")
 }
