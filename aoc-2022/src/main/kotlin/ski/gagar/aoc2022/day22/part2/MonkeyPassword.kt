@@ -1,4 +1,4 @@
-package ski.gagar.aoc2022.day22.part1
+package ski.gagar.aoc2022.day22.part2
 
 import org.codehaus.jparsec.Parsers
 import org.codehaus.jparsec.Scanners
