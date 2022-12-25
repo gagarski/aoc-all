@@ -2,6 +2,9 @@ package ski.gagar.aoc2022
 
 import ski.gagar.aoc2022.day23.part1.day23Part1
 import ski.gagar.aoc2022.day23.part2.day23Part2
+import ski.gagar.aoc2022.day24.part1.day24Part1
+import ski.gagar.aoc2022.day24.part2.day24Part2
+import ski.gagar.aoc2022.day25.part1.day25Part1
 
 fun main() {
 //    day1Part1()
@@ -46,6 +49,9 @@ fun main() {
 //    day20Part2()
 //    day21Part1()
 //    day21Part2()
-    day23Part1()
-    day23Part2()
+//    day23Part1()
+//    day23Part2()
+//    day24Part1()
+//    day24Part2()
+    day25Part1()
 }
