@@ -1,10 +1,10 @@
 package ski.gagar.aoc2022.day14.part1
 
-import org.codehaus.jparsec.Parser
-import org.codehaus.jparsec.Parsers
-import org.codehaus.jparsec.Scanners
-import org.codehaus.jparsec.Terminals
-import org.codehaus.jparsec.Tokens
+import org.jparsec.Parser
+import org.jparsec.Parsers
+import org.jparsec.Scanners
+import org.jparsec.Terminals
+import org.jparsec.Tokens
 import ski.gagar.aoc.util.getResourceAsStream
 import ski.gagar.aoc2022.day13.part1.getSumOfIndices
 import kotlin.math.sign

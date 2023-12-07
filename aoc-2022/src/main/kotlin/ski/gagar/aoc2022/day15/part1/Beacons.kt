@@ -1,9 +1,9 @@
 package ski.gagar.aoc2022.day15.part1
 
-import org.codehaus.jparsec.Parsers
-import org.codehaus.jparsec.Scanners
-import org.codehaus.jparsec.Terminals
-import org.codehaus.jparsec.Tokens
+import org.jparsec.Parsers
+import org.jparsec.Scanners
+import org.jparsec.Terminals
+import org.jparsec.Tokens
 import ski.gagar.aoc.util.getResourceAsStream
 import ski.gagar.aoc2022.day11.part1.MonkeyParser
 import java.util.BitSet

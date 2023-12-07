@@ -1,7 +1,7 @@
 package ski.gagar.aoc2022.day21.part2
 
-import org.codehaus.jparsec.*
-import org.codehaus.jparsec.functors.Map2
+import org.jparsec.*
+import org.jparsec.functors.Map2
 import ski.gagar.aoc.util.getResourceAsStream
 import java.math.BigInteger
 import java.util.TreeMap

@@ -1,12 +1,12 @@
 package ski.gagar.aoc2022.day11.part1
 
-import org.codehaus.jparsec.OperatorTable
-import org.codehaus.jparsec.Parser
-import org.codehaus.jparsec.Parsers
-import org.codehaus.jparsec.Scanners
-import org.codehaus.jparsec.Terminals
-import org.codehaus.jparsec.Tokens
-import org.codehaus.jparsec.functors.Map2
+import org.jparsec.OperatorTable
+import org.jparsec.Parser
+import org.jparsec.Parsers
+import org.jparsec.Scanners
+import org.jparsec.Terminals
+import org.jparsec.Tokens
+import org.jparsec.functors.Map2
 import ski.gagar.aoc.util.getResourceAsStream
 import ski.gagar.aoc2022.day11.part2.big
 
