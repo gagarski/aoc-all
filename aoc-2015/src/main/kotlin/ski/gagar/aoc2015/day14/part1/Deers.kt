@@ -1,9 +1,9 @@
 package ski.gagar.aoc2015.day14.part1
 
-import org.codehaus.jparsec.Parsers
-import org.codehaus.jparsec.Scanners
-import org.codehaus.jparsec.Terminals
-import org.codehaus.jparsec.pattern.CharPredicates
+import org.jparsec.Parsers
+import org.jparsec.Scanners
+import org.jparsec.Terminals
+import org.jparsec.pattern.CharPredicates
 import ski.gagar.aoc.util.getResourceAsStream
 import kotlin.math.min
 

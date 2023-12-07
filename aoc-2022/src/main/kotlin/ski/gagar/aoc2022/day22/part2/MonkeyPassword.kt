@@ -1,7 +1,7 @@
 package ski.gagar.aoc2022.day22.part2
 
-import org.codehaus.jparsec.Parsers
-import org.codehaus.jparsec.Scanners
+import org.jparsec.Parsers
+import org.jparsec.Scanners
 import ski.gagar.aoc.util.getResourceAsStream
 import java.util.*
 import kotlin.collections.ArrayDeque

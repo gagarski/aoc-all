@@ -1,7 +1,7 @@
 package ski.gagar.aoc2015.day8.part1
 
-import org.codehaus.jparsec.Parsers
-import org.codehaus.jparsec.Scanners
+import org.jparsec.Parsers
+import org.jparsec.Scanners
 import ski.gagar.aoc.util.getResourceAsStream
 
 object EscapedStringParser {

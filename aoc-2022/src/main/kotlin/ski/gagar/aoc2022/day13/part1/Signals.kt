@@ -1,11 +1,11 @@
 package ski.gagar.aoc2022.day13.part1
 
-import org.codehaus.jparsec.Parser
-import org.codehaus.jparsec.Parsers
-import org.codehaus.jparsec.Scanners
-import org.codehaus.jparsec.Terminals
-import org.codehaus.jparsec.Terminals.IntegerLiteral
-import org.codehaus.jparsec.Tokens.Fragment
+import org.jparsec.Parser
+import org.jparsec.Parsers
+import org.jparsec.Scanners
+import org.jparsec.Terminals
+import org.jparsec.Terminals.IntegerLiteral
+import org.jparsec.Tokens.Fragment
 import ski.gagar.aoc.util.getResourceAsStream
 import java.lang.IllegalStateException
 

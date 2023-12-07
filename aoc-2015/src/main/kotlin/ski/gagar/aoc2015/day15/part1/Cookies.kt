@@ -1,12 +1,10 @@
 package ski.gagar.aoc2015.day15.part1
 
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toPersistentList
-import org.codehaus.jparsec.Parsers
-import org.codehaus.jparsec.Scanners
-import org.codehaus.jparsec.Terminals
-import org.codehaus.jparsec.pattern.CharPredicates
+import org.jparsec.Parsers
+import org.jparsec.Scanners
+import org.jparsec.Terminals
+import org.jparsec.pattern.CharPredicates
 import ski.gagar.aoc.util.getResourceAsStream
 
 interface Additive<T> {
