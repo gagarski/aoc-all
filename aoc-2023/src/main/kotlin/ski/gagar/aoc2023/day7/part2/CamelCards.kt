@@ -49,7 +49,7 @@ class Hand(val cards: List<Card>) : Comparable<Hand> {
 
     init {
         require(cards.size == 5)
-        var nJokers = cards.count { it == Card.JOKER }
+        val nJokers = cards.count { it == Card.JOKER }
         val counts = cards
             .groupingBy { it }
             .eachCount()
@@ -71,18 +71,25 @@ class Hand(val cards: List<Card>) : Comparable<Hand> {
 
 
         val byCount = buildByCount()
-
+        // Best card is a highest card in a biggest group
+        // Perhaps "highest" part is redundant because there is no such a thing as "higher pair" here
+        // Converting jokers to the best card is a good choice in this version of poker
+        // Alternative to this approach would counting jokers and handling their amount in Combo.containedInHand
         val bestCard = byCount.asSequence().flatMap {
             it.value.asSequence()
         }.filter {
             it != Card.JOKER
         }.firstOrNull()
 
+        // Special check for JJJJJ, actually. In other cases we'll
+        // have non-joker best card
+        // We're letting JJJJJ be JJJJJ which is a five-of-a-kind with the least tie-breaking value
         if (bestCard != null && bestCard != Card.JOKER) {
             counts[bestCard] = counts[bestCard]!! + nJokers
             counts.remove(Card.JOKER)
         }
 
+        // Rebuilding byCount from updated counts
         this.byCount = buildByCount()
     }
 
