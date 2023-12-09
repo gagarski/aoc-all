@@ -301,7 +301,6 @@ fun findMinWinCost(bossStats: String,
 }
 
 fun day21Part1() {
-    println(Player(hitPoints=100, damage=7, armor=4).battle(Player(hitPoints=109, damage=8, armor=2)))
     println("day21/part1/rpg: ${
         findMinWinCost(
             getResourceAsStream("/ski.gagar.aoc.aoc2015.day21/boss.txt").bufferedReader().readText()
