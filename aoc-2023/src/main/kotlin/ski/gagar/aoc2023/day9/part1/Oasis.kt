@@ -1,13 +1,12 @@
-package ski.gagar.aoc2023.day9.part2
+package ski.gagar.aoc2023.day9.part1
 
 import ski.gagar.aoc.util.getResourceAsStream
-import ski.gagar.aoc2023.day8.part1.nSteps
 
 class OasisSequence(seq: Sequence<Long>) {
-    private val seq_ = ArrayDeque(seq.toList())
+    private val seq_ = seq.toMutableList()
 
     private val seq: List<Long>
-        get() = seq_.toList()
+        get() = seq_
 
     fun extrapolate(): Long {
         val derivativesLast = mutableListOf<Long>()
@@ -26,23 +25,6 @@ class OasisSequence(seq: Sequence<Long>) {
         return extrapolated
     }
 
-    fun extrapolateLeft(): Long {
-        val derivativesFirst = mutableListOf<Long>()
-        var current: List<Long> = seq_
-
-        while (!current.isStable()) {
-            current = current.derivative()
-            derivativesFirst.add(current.first())
-        }
-
-        for (ix in derivativesFirst.lastIndex - 1 downTo 0) {
-            derivativesFirst[ix] = derivativesFirst[ix] - derivativesFirst[ix + 1]
-        }
-        val extrapolated = seq_.first() - (derivativesFirst.firstOrNull() ?: 0)
-        seq_.addFirst(extrapolated)
-        return extrapolated
-    }
-
     companion object {
         fun List<Long>.derivative() : List<Long> {
             require(size > 1)
@@ -55,11 +37,11 @@ class OasisSequence(seq: Sequence<Long>) {
 }
 
 fun sumExtrapolated(lines: Sequence<String>) =
-    lines.map { OasisSequence.from(it).extrapolateLeft() }.sum()
+    lines.map { OasisSequence.from(it).extrapolate() }.sum()
 
-fun day9Part2() {
+fun day9Part1() {
     println(
-        "day9/part2/oasis: ${
+        "day9/part1/oasis: ${
             sumExtrapolated(
                 getResourceAsStream("/ski.gagar.aoc.aoc2023.day9/oasis.txt").bufferedReader().lineSequence())
         }"
