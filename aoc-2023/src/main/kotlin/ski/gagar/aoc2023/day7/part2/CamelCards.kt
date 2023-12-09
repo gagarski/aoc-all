@@ -169,7 +169,6 @@ private fun stakesSummary(lines: Sequence<String>) =
         .sorted()
         .withIndex()
         .map { (ix, hws) ->
-            println("${ix + 1} $hws")
             (ix + 1) * hws.stake
         }.sum()
 

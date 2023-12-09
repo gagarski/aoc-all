@@ -12,7 +12,6 @@ fun List<Blueprint>.quality(
     var q = 1
 
     for (bp in this.take(take)) {
-        println(bp.id)
         q *= (bp.bestCourseOfAction(limit, initialRobots, targetCurrency).result.amounts[targetCurrency] ?: 0)
     }
 
