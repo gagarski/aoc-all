@@ -1127,7 +1127,7 @@ fun evaluate(input: String): Int {
     val field = MonkeyFieldParser.parse(input)
     field.runInstructions()
 
-    return (field.sweepCoords.y + 1) * 1000 + (field.sweepCoords.x + 1) * 4 + + when (field.flatDirection) {
+    return (field.sweepCoords.y + 1) * 1000 + (field.sweepCoords.x + 1) * 4 + when (field.flatDirection) {
         FlatDirection.RIGHT -> 0
         FlatDirection.DOWN -> 1
         FlatDirection.LEFT -> 2

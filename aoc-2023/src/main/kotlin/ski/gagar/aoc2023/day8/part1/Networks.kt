@@ -114,7 +114,6 @@ object NetworkMapParser {
 
     private val PARSER = MAP_WITH_INSTRUCTIONS.from(TOKENIZER, WHITESPACES)
 
-
     fun parse(string: String) = PARSER.parse(string)
 }
 
