@@ -125,9 +125,3 @@ fun scan(text: String,
 
     return null
 }
-
-fun day15Part2() {
-    println("day15/part2/beacons: ${
-        scan(getResourceAsStream("/ski.gagar.aoc.aoc2022.day15/beacons.txt").bufferedReader().readText())
-    }")
-}

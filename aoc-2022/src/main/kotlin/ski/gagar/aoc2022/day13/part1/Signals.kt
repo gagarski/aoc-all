@@ -85,9 +85,3 @@ fun getSumOfIndices(seq: Sequence<String>) =
         .map { (ix, v) -> ix + 1 to v }
         .filter { (_, v) -> v.isCorrectOrder() }
         .sumOf { (ix, _) -> ix }
-
-fun day13Part1() {
-    println("day13/part1/signals: ${
-        getSumOfIndices(getResourceAsStream("/ski.gagar.aoc.aoc2022.day13/signals.txt").bufferedReader().lineSequence())
-    }")
-}

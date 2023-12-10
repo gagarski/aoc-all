@@ -29,9 +29,3 @@ infix fun IntRange.intersects(other: IntRange): Boolean =
 
 fun countIntersecting(strings: Sequence<String>) =
     strings.map { parsePairOfRanges(it) }.count { it.first intersects it.second }
-
-fun day4Part2() {
-    println("day4/part2/compartments: ${
-        countIntersecting(getResourceAsStream("/ski.gagar.aoc.aoc2022.day4/compartments.txt").bufferedReader().lineSequence())
-    }")
-}

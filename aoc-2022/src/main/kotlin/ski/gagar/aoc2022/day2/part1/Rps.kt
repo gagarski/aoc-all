@@ -60,9 +60,3 @@ fun playRound(string: String): Int {
 }
 
 fun playAllRounds(string: Sequence<String>) = string.sumOf { playRound(it) }
-
-fun day2Part1() {
-    println("day2/part1/rps: ${
-        playAllRounds(getResourceAsStream("/ski.gagar.aoc.aoc2022.day2/rps.txt").bufferedReader().lineSequence())
-    }")
-}

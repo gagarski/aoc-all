@@ -145,9 +145,3 @@ fun findShortestPath(lines: Sequence<String>): Int {
 
     return heightMap.shortestPath(start!!, end!!).weight
 }
-
-fun day12Part1() {
-    println("day12/part1/heights: ${
-        findShortestPath(getResourceAsStream("/ski.gagar.aoc.aoc2022.day12/heights.txt").bufferedReader().lineSequence())
-    }")
-}

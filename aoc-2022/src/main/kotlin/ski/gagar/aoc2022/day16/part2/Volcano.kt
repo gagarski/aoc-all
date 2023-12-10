@@ -199,14 +199,3 @@ fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit
     }
 
 }
-
-
-fun day16Part2() {
-    println("day16/part2/volcano: ${
-        bestCourseOfAction(
-            VolcanoParser.parse(
-                getResourceAsStream("/ski.gagar.aoc.aoc2022.day16/volcano.txt").bufferedReader().readText()
-            )
-        )?.result
-    }")
-}

@@ -184,11 +184,3 @@ fun getNSteps(lines: Sequence<String>, nSteps: Int = 10): Int {
     val field = ElfField(coords)
     return field.stepWhileMoving()
 }
-
-fun day23Part2() {
-    println("day23/part2/plants: \n${
-        getNSteps(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day23/plants.txt").bufferedReader().lineSequence()
-        )
-    }")
-}

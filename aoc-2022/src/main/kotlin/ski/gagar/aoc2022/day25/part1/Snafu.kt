@@ -59,11 +59,3 @@ fun Long.toSnafu(): String = buildString {
 
 
 fun genSnafuSum(lines: Sequence<String>) = lines.map { it.snafuToLong() }.sum().toSnafu()
-
-fun day25Part1() {
-    println("day25/part1/snafu: \n${
-        genSnafuSum(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day25/snafu.txt").bufferedReader().lineSequence()
-        )
-    }")
-}

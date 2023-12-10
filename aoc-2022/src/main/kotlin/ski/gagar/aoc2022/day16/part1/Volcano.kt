@@ -304,13 +304,3 @@ object VolcanoParser {
 
     fun parse(str: String) = VOLCANO_NODES_WITH_NL.from(TOKENIZER, WHITESPACES).parse(str)
 }
-
-fun day16Part1() {
-    println("day16/part1/volcano: ${
-        bestCourseOfAction(
-            VolcanoParser.parse(
-                getResourceAsStream("/ski.gagar.aoc.aoc2022.day16/volcano.txt").bufferedReader().readText()
-            )
-        )?.result
-    }")
-}

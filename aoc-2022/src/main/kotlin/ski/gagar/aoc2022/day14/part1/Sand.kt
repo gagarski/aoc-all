@@ -142,9 +142,3 @@ fun simulate(lines: Sequence<String>, sandSource: Point = Point(500, 0)): Int {
 
     return cave.sandFallWhileResting()
 }
-
-fun day14Part1() {
-    println("day14/part1/sand: ${
-        simulate(getResourceAsStream("/ski.gagar.aoc.aoc2022.day14/cave.txt").bufferedReader().lineSequence())
-    }")
-}

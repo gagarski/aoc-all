@@ -150,9 +150,3 @@ fun runLoopWise(lines: Sequence<String>, width: Int = 40, height: Int = 6, sprit
 
     return display
 }
-
-fun day10Part2() {
-    println("day10/part2/crt: \n${
-        runLoopWise(getResourceAsStream("/ski.gagar.aoc.aoc2022.day10/cathode.txt").bufferedReader().lineSequence())
-    }")
-}

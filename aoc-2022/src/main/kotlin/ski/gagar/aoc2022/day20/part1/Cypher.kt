@@ -165,12 +165,3 @@ fun getResult(lines: Sequence<String>, indices: Set<Int> = setOf(1000, 2000, 300
 
     return indices.sumOf { res[(it + beaconIndex) % res.size] }
 }
-
-fun day20Part1() {
-    println("day20/part1/cypher: ${
-        getResult(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day20/cypher.txt").bufferedReader()
-                .lineSequence()
-        )
-    }")
-}

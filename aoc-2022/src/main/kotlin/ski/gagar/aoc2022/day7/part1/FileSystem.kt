@@ -196,9 +196,3 @@ fun getSumOfDirsLessThan(sequence: Sequence<String>, limit: Int = 100000): Int {
     console.consumeLines(sequence)
     return console.fs.lsR().asSequence().map { it.fsItem }.filterIsInstance<Directory>().filter { it.size() <= limit }.sumOf { it.size() }
 }
-
-fun day7Part1() {
-    println("day7/part1/console: ${
-        getSumOfDirsLessThan(getResourceAsStream("/ski.gagar.aoc.aoc2022.day7/console.txt").bufferedReader().lineSequence())
-    }")
-}

@@ -126,9 +126,3 @@ fun maxScenicScore(strings: Sequence<String>): Int {
 
     return maxSoFar
 }
-
-fun day8Part2() {
-    println("day8/part2/forest: ${
-        maxScenicScore(getResourceAsStream("/ski.gagar.aoc.aoc2022.day8/forest.txt").bufferedReader().lineSequence())
-    }")
-}

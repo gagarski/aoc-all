@@ -142,9 +142,3 @@ fun doMoves(lines: Sequence<String>): String {
     }
 
 }
-
-fun day5Part1() {
-    println("day5/part1/crates: ${
-        doMoves(getResourceAsStream("/ski.gagar.aoc.aoc2022.day5/crates.txt").bufferedReader().lineSequence())
-    }")
-}

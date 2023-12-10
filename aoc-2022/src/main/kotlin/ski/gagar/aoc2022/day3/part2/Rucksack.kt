@@ -45,10 +45,3 @@ fun sumPriorities(strings: Sequence<String>, chunkSize: Int = 3) =
     strings.chunked(chunkSize).sumOf { rucksack ->
         Rucksack.badge(rucksack.map { Rucksack.parse(it) }).priority
     }
-
-
-fun day3Part2() {
-    println("day3/part2/rucksacks: ${
-        sumPriorities(getResourceAsStream("/ski.gagar.aoc.aoc2022.day3/rucksacks.txt").bufferedReader().lineSequence())
-    }")
-}

@@ -666,11 +666,3 @@ fun evaluate(input: String, variable: String = "root", eqVariable: String = "hum
     val frac = calc.polynomFractionForName(variable, eqVariable)
     return frac.rootSequence().first()
 }
-
-fun day21Part2() {
-    println("day21/part2/monkeys: \n${
-        evaluate(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day21/monkeys.txt").bufferedReader().readText()
-        )
-    }")
-}

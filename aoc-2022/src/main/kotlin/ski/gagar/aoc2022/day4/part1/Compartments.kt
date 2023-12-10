@@ -31,9 +31,3 @@ fun Pair<IntRange, IntRange>.fullyIntersect(): Boolean {
 
 fun countFullyIntersecting(strings: Sequence<String>) =
     strings.map { parsePairOfRanges(it) }.count { it.fullyIntersect() }
-
-fun day4Part1() {
-    println("day4/part1/compartments: ${
-        countFullyIntersecting(getResourceAsStream("/ski.gagar.aoc.aoc2022.day4/compartments.txt").bufferedReader().lineSequence())
-    }")
-}

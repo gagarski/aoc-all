@@ -359,11 +359,3 @@ fun Blueprint.run(
     }
     return state
 }
-
-fun day19Part1() {
-    println("day19/part1/robots: ${
-        RobotsParser.parse(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day19/robots.txt").bufferedReader().readText()
-        ).quality()
-    }")
-}
