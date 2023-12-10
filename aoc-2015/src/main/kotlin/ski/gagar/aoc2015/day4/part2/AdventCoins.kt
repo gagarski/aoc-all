@@ -41,12 +41,3 @@ fun bruteforceCoins(key: String, leadingZeros: Int = 6): Int {
 
     return -1
 }
-
-
-fun day4Part2() {
-    println(
-        "day4/part1/coins: ${
-            bruteforceCoins(getResourceAsStream("/ski.gagar.aoc.aoc2015.day4/coins.txt").bufferedReader().lineSequence().first(), 6)
-        }"
-    )
-}

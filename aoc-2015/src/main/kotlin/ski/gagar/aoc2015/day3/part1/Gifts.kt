@@ -36,11 +36,3 @@ fun drive(instructions: String): Int {
 
     return nGifts.size
 }
-
-fun day3Part1() {
-    println(
-        "day3/part1/gifts: ${
-            drive(getResourceAsStream("/ski.gagar.aoc.aoc2015.day3/gifts.txt").bufferedReader().lineSequence().first())
-        }"
-    )
-}

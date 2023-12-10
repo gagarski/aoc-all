@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <main-class>ski.gagar.aoc2015.MainKt</main-class>
+        <main-class>ski.gagar.aoc2015.Aoc2015Kt</main-class>
     </properties>
 
     <build>

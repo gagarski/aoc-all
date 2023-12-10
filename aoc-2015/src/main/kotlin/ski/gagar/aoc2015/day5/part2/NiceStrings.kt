@@ -56,11 +56,3 @@ fun countNice(
     repeatedLength: Int = 2,
     palindromeLength: Int = 3
 ) = strings.count { isNice(it, repeatedLength, palindromeLength) }
-
-fun day5Part2() {
-    println(
-        "day5/part2/nice: ${
-            countNice(getResourceAsStream("/ski.gagar.aoc.aoc2015.day5/nice.txt").bufferedReader().lineSequence())
-        }"
-    )
-}

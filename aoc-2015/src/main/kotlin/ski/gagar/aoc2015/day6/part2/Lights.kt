@@ -183,11 +183,3 @@ fun totalBrightness(commands: Sequence<String>): Int {
     grid.execProgram(commands)
     return grid.totalBrightness
 }
-
-fun day6Part2() {
-    println(
-        "day6/part2/bulbs: ${
-            totalBrightness(getResourceAsStream("/ski.gagar.aoc.aoc2015.day6/bulbs.txt").bufferedReader().lineSequence())
-        }"
-    )
-}

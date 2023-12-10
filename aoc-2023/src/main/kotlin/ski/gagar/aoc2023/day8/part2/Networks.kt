@@ -52,12 +52,3 @@ fun nSteps(input: String,
            sourcePred: (String) -> Boolean = { it.endsWith("A") },
            destPred: (String) -> Boolean = { it.endsWith("Z") }) =
     NetworkMapParser.parse(input).followGhostLen(sourcePred, destPred)
-
-fun day8Part2() {
-    println(
-        "day8/part2/networks: ${
-            nSteps(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day8/networks.txt").bufferedReader().readText())
-        }"
-    )
-}

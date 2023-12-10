@@ -49,13 +49,3 @@ private val String.calibrationValue
 fun calibration(strings: Sequence<String>) = strings.sumOf {
     it.calibrationValue
 }
-
-fun day1Part2() {
-    println(
-        "day1/part2/calibration: ${
-            calibration(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day1/calibration.txt").bufferedReader().lineSequence()
-            )
-        }"
-    )
-}

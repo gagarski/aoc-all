@@ -210,13 +210,3 @@ object LocationsParser {
 
 
 fun lowestLocation(input: String) = LocationsParser.parse(input).getLowestLocation()
-
-fun day5Part1() {
-    println(
-        "day5/part1/locations: ${
-            lowestLocation(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day5/locations.txt").bufferedReader().readText()
-            )
-        }"
-    )
-}

@@ -45,9 +45,3 @@ object EscapedStringParser {
 
 fun countDiff(strings: Sequence<String>) =
     strings.map { it to EscapedStringParser.parse(it) }.sumOf { it.first.length - it.second.length }
-
-fun day8Part1() {
-    println("day8/part1/escaping: ${
-        countDiff(getResourceAsStream("/ski.gagar.aoc.aoc2015.day8/escaping.txt").bufferedReader().lineSequence())
-    }")
-}

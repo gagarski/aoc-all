@@ -19,11 +19,3 @@ fun findMaxLoseCost(bossStats: String,
         it.inventory.cost
     }?.inventory?.cost
 }
-
-fun day21Part2() {
-    println("day21/part2/rpg: ${
-        findMaxLoseCost(
-            getResourceAsStream("/ski.gagar.aoc.aoc2015.day21/boss.txt").bufferedReader().readText()
-        )
-    }")
-}

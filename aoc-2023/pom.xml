@@ -11,6 +11,10 @@
 
     <artifactId>aoc-2023</artifactId>
 
+    <properties>
+        <main-class>ski.gagar.aoc2023.Aoc2023Kt</main-class>
+    </properties>
+
     <build>
         <plugins>
             <plugin>

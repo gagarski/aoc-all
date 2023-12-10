@@ -300,10 +300,3 @@ fun findMinWinCost(bossStats: String,
     }?.inventory?.cost
 }
 
-fun day21Part1() {
-    println("day21/part1/rpg: ${
-        findMinWinCost(
-            getResourceAsStream("/ski.gagar.aoc.aoc2015.day21/boss.txt").bufferedReader().readText()
-        )
-    }")
-}

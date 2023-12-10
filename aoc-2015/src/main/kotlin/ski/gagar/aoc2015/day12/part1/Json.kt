@@ -33,10 +33,3 @@ fun sumIntJson(json: String): Int {
     val map = mapper.readValue(json, Map::class.java)
     return map.sumInts()
 }
-
-
-fun day12Part1() {
-    println("day12/part1/json: ${
-        sumIntJson(getResourceAsStream("/ski.gagar.aoc.aoc2015.day12/ints.json").bufferedReader().readText())
-    }")
-}

@@ -45,11 +45,3 @@ fun nCombinationsMin(containers: List<Container>, sum: Int = 150): Int {
 
 fun nCombinations(sequence: Sequence<String>, sum: Int = 150): Int =
     nCombinationsMin(sequence.map { Container(it.toInt()) }.toList(), sum)
-
-fun day17Part2() {
-    println("day17/part1/containers: ${
-        nCombinations(
-            getResourceAsStream("/ski.gagar.aoc.aoc2015.day17/containers.txt").bufferedReader().lineSequence()
-        )
-    }")
-}

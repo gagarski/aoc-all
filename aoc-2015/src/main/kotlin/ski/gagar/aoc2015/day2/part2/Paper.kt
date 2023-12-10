@@ -49,11 +49,3 @@ fun getRibbonLengthForLine(string: String): Int =
 fun getTotalRibbonLength(lines: Sequence<String>): Int =
     lines.sumOf { getRibbonLengthForLine(it) }
 
-
-fun day2Part2() {
-    println(
-        "day2/part1/paper: ${
-            getTotalRibbonLength(getResourceAsStream("/ski.gagar.aoc.aoc2015.day2/paper.txt").bufferedReader().lineSequence())
-        }"
-    )
-}

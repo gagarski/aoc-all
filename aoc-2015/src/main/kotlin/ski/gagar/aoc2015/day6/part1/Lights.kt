@@ -143,11 +143,3 @@ fun nBulbs(commands: Sequence<String>): Int {
     grid.execProgram(commands)
     return grid.onCount
 }
-
-fun day6Part1() {
-    println(
-        "day6/part1/bulbs: ${
-            nBulbs(getResourceAsStream("/ski.gagar.aoc.aoc2015.day6/bulbs.txt").bufferedReader().lineSequence())
-        }"
-    )
-}

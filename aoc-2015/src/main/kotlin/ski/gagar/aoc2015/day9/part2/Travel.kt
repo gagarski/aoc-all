@@ -94,9 +94,3 @@ fun buildGraph(strings: Sequence<String>): Graph {
 
 fun longestPath(strings: Sequence<String>): Int? =
     buildGraph(strings).findLongestPath()?.pathLength?.let { it }
-
-fun day9Part2() {
-    println("day9/part2/escaping: ${
-        longestPath(getResourceAsStream("/ski.gagar.aoc.aoc2015.day9/travel.txt").bufferedReader().lineSequence())
-    }")
-}

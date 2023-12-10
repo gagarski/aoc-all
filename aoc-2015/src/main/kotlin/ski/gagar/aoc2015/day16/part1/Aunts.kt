@@ -77,12 +77,3 @@ object AuntParser {
 
 fun findFirstMatching(auntStrings: Sequence<String>, descs: Sequence<String>) =
     findFirstMatching(AuntParser.parseUnknownAunt(auntStrings), descs.map { AuntParser.parseDescription(it) })?.index
-
-fun day16Part1() {
-    println("day16/part1/aunts: ${
-        findFirstMatching(
-            getResourceAsStream("/ski.gagar.aoc.aoc2015.day16/unknown.txt").bufferedReader().lineSequence(),
-            getResourceAsStream("/ski.gagar.aoc.aoc2015.day16/descriptions.txt").bufferedReader().lineSequence()
-        )
-    }")
-}

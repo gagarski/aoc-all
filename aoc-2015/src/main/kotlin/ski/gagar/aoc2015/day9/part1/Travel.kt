@@ -99,8 +99,3 @@ fun buildGraph(strings: Sequence<String>): Graph {
 fun shortestPath(strings: Sequence<String>): Int? =
     buildGraph(strings).findShortestPath()?.pathLength
 
-fun day9Part1() {
-    println("day9/part1/escaping: ${
-        shortestPath(getResourceAsStream("/ski.gagar.aoc.aoc2015.day9/travel.txt").bufferedReader().lineSequence())
-    }")
-}

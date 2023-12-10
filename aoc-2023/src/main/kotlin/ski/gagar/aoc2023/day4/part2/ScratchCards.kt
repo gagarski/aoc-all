@@ -31,13 +31,3 @@ fun processPile(lines: Sequence<String>): Int {
 
     return copies.values.sum()
 }
-
-fun day4Part2() {
-    println(
-        "day4/part2/scratchcards: ${
-            processPile(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day4/scratchcards.txt").bufferedReader().lineSequence()
-            )
-        }"
-    )
-}

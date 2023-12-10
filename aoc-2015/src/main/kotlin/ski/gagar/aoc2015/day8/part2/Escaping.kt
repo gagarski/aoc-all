@@ -18,9 +18,3 @@ fun encode(string: String) = buildString {
 
 fun countDiff(strings: Sequence<String>) =
     strings.map { it to encode(it) }.sumOf { it.second.length - it.first.length }
-
-fun day8Part2() {
-    println("day8/part2/escaping: ${
-        countDiff(getResourceAsStream("/ski.gagar.aoc.aoc2015.day8/escaping.txt").bufferedReader().lineSequence())
-    }")
-}

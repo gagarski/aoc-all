@@ -102,17 +102,7 @@ object CubeGameParser {
     fun parse(input: String) = GAME.from(TOKENIZER, WHITESPACES).parse(input)
 }
 
-private fun sumIdsIfIsPossible(lines: Sequence<String>, limits: Round) =
+fun sumIdsIfIsPossible(lines: Sequence<String>, limits: Round = Round(12, 13, 14)) =
     lines.map { CubeGameParser.parse(it) }
         .filter { it.isPossible(limits) }
         .sumOf { it.id }
-
-fun day2Part1() {
-    println(
-        "day2/part1/cubes: ${
-            sumIdsIfIsPossible(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day2/cubes.txt").bufferedReader().lineSequence(), 
-                Round(12, 13, 14))
-        }"
-    )
-}

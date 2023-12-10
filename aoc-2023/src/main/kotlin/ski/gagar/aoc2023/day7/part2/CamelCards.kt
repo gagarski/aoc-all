@@ -162,7 +162,7 @@ class HandWithStake(val hand: Hand, val stake: Long) : Comparable<HandWithStake>
     }
 }
 
-private fun stakesSummary(lines: Sequence<String>) =
+fun stakesSummary(lines: Sequence<String>) =
     lines.map {
         HandWithStake.from(it)
     }
@@ -171,13 +171,3 @@ private fun stakesSummary(lines: Sequence<String>) =
         .map { (ix, hws) ->
             (ix + 1) * hws.stake
         }.sum()
-
-fun day7Part2() {
-    println(
-        "day7/part2/cards: ${
-            stakesSummary(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day7/cards.txt").bufferedReader().lineSequence()
-            )
-        }"
-    )
-}
