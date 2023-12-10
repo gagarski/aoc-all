@@ -94,15 +94,5 @@ class Board(lines: Sequence<String>) {
     }
 }
 
-private fun partNumbers(lines: Sequence<String>) =
+fun partNumbers(lines: Sequence<String>) =
     Board(lines).partNumbers().sum()
-
-fun day3Part1() {
-    println(
-        "day3/part1/partNumbers: ${
-            partNumbers(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day3/board.txt").bufferedReader().lineSequence()
-            )
-        }"
-    )
-}

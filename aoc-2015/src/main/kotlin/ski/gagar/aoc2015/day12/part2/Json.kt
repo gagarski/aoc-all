@@ -22,8 +22,6 @@ fun Any.traverseForInts(callable: (Int) -> Unit) {
     }
 }
 
-
-
 fun Any.sumInts(): Int {
     var int = 0
     traverseForInts { int += it }
@@ -36,9 +34,3 @@ fun sumIntJson(json: String): Int {
     return map.sumInts()
 }
 
-
-fun day12Part2() {
-    println("day12/part2/json: ${
-        sumIntJson(getResourceAsStream("/ski.gagar.aoc.aoc2015.day12/ints.json").bufferedReader().readText())
-    }")
-}

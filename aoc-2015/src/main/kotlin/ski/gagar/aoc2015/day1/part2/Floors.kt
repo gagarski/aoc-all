@@ -20,11 +20,3 @@ fun floors(input: String, target: Int = BASEMENT): Int {
     }
     return -1
 }
-
-fun day1Part2() {
-    println(
-        "day1/part2/floors: ${
-            floors(getResourceAsStream("/ski.gagar.aoc.aoc2015.day1/floors.txt").bufferedReader().lineSequence().first())
-        }"
-    )
-}

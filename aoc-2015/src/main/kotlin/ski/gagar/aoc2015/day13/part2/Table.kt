@@ -30,10 +30,3 @@ fun sittingGraphWithMe(strings: Sequence<String>): Graph {
 }
 
 fun optimalHappinessWithMe(strings: Sequence<String>) = sittingGraphWithMe(strings).findLongestPath()?.pathLength
-
-
-fun day13Part2() {
-    println("day13/part2/table: ${
-        optimalHappinessWithMe(getResourceAsStream("/ski.gagar.aoc.aoc2015.day13/table.txt").bufferedReader().lineSequence())
-    }")
-}

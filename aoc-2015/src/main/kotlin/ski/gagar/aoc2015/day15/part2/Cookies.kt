@@ -114,9 +114,3 @@ fun getOptimalCompoundValue(strings: Sequence<String>) =
         { IngredientValue(it.capacity, it.durability, it.flavor, it.texture) },
         compoundPredicate = { it.ingredients.map { (k, v) -> k.calories * v }.sum() == 500 }
     )?.value?.numeric
-
-fun day15Part2() {
-    println("day15/part2/cookies: ${
-        getOptimalCompoundValue(getResourceAsStream("/ski.gagar.aoc.aoc2015.day15/cookies.txt").bufferedReader().lineSequence())
-    }")
-}

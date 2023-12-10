@@ -67,11 +67,3 @@ fun countNice(
     vowels: Set<Char> = VOWELS,
     bad: Set<String> = BAD
 ) = strings.count { isNice(it, nVowels, nRepeats, vowels, bad) }
-
-fun day5Part1() {
-    println(
-        "day5/part1/nice: ${
-            countNice(getResourceAsStream("/ski.gagar.aoc.aoc2015.day5/nice.txt").bufferedReader().lineSequence())
-        }"
-    )
-}

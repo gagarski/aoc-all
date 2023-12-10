@@ -38,12 +38,3 @@ class OasisSequence(seq: Sequence<Long>) {
 
 fun sumExtrapolated(lines: Sequence<String>) =
     lines.map { OasisSequence.from(it).extrapolate() }.sum()
-
-fun day9Part1() {
-    println(
-        "day9/part1/oasis: ${
-            sumExtrapolated(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day9/oasis.txt").bufferedReader().lineSequence())
-        }"
-    )
-}

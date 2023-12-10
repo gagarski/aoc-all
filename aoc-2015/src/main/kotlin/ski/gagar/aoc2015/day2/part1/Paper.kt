@@ -40,12 +40,3 @@ fun getAreaForLine(string: String): Int =
 
 fun getTotalArea(lines: Sequence<String>): Int =
     lines.sumOf { getAreaForLine(it) }
-
-
-fun day2Part1() {
-    println(
-        "day2/part1/paper: ${
-            getTotalArea(getResourceAsStream("/ski.gagar.aoc.aoc2015.day2/paper.txt").bufferedReader().lineSequence())
-        }"
-    )
-}

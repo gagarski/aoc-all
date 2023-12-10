@@ -171,10 +171,3 @@ fun runDeers(strings: Sequence<String>, time: Int = 2503): Int? {
     lane.advanceTime(time)
     return lane.leaderboard.firstOrNull()?.distancePassed
 }
-
-
-fun day14Part1() {
-    println("day14/part1/deers: ${
-        runDeers(getResourceAsStream("/ski.gagar.aoc.aoc2015.day14/deers.txt").bufferedReader().lineSequence())
-    }")
-}

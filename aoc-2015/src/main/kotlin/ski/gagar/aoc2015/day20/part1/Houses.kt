@@ -21,11 +21,3 @@ fun sumDivisors(n: Int): Int {
 
 fun firstHouseWithPresentsCount(target: Int, presentsPerHouse: Int = 10) =
     generateSequence(1) { it + 1 }.first { sumDivisors(it) * presentsPerHouse >= target }
-
-fun day20Part1() {
-    println("day20/part1/houses: ${
-        firstHouseWithPresentsCount(
-            getResourceAsStream("/ski.gagar.aoc.aoc2015.day20/houses.txt").bufferedReader().lineSequence().first().toInt()
-        )
-    }")
-}

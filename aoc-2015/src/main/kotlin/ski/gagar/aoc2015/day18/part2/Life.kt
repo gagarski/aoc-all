@@ -156,19 +156,3 @@ fun parseLife(strings: Sequence<String>, nextState: (CellWithNeighbors) -> Boole
 
 fun parseAndRun(strings: Sequence<String>, iterations: Int = 100, nextState: (CellWithNeighbors) -> Boolean = ::defaultNextState) =
     parseLife(strings, nextState).apply { run(iterations) }.cardinality
-
-fun day18Part2() {
-    println("day18/part2/life: ${
-        parseAndRun(
-            getResourceAsStream("/ski.gagar.aoc.aoc2015.day18/life.txt").bufferedReader().lineSequence(),
-            nextState = { state ->
-                if (state.x == 0 && state.y == 0) return@parseAndRun true
-                if (state.x == 0 && state.y == state.life.height - 1) return@parseAndRun true
-                if (state.x == state.life.width - 1 && state.y == 0) return@parseAndRun true
-                if (state.x == state.life.width - 1 && state.y == state.life.height - 1) return@parseAndRun true
-                
-                defaultNextState(state)
-            }
-        )
-    }")
-}

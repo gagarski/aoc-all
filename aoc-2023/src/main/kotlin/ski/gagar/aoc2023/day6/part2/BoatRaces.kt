@@ -66,13 +66,3 @@ object BoatRacesParser {
 
 fun multiplyOfNWinningOptions(input: String) =
     BoatRacesParser.parse(input).nWinningOptions
-
-fun day6Part2() {
-    println(
-        "day6/part1/boatRaces: ${
-            multiplyOfNWinningOptions(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day6/boatRaces.txt").bufferedReader().readText()
-            )
-        }"
-    )
-}

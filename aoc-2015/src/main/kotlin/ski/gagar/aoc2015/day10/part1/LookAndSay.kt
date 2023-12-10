@@ -36,9 +36,3 @@ fun lookAnsSayLength(string: String, iterations: Int = 40): Int {
 
     return current.length
 }
-
-fun day10Part1() {
-    println("day9/part2/look-and-say: ${
-        lookAnsSayLength(getResourceAsStream("/ski.gagar.aoc.aoc2015.day10/look-and-say.txt").bufferedReader().lineSequence().first())
-    }")
-}

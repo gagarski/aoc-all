@@ -38,10 +38,3 @@ fun runDeers(strings: Sequence<String>, time: Int = 2503): Int? {
 
     return lb.results.firstOrNull()?.points
 }
-
-
-fun day14Part2() {
-    println("day14/part1/deers: ${
-        runDeers(getResourceAsStream("/ski.gagar.aoc.aoc2015.day14/deers.txt").bufferedReader().lineSequence())
-    }")
-}

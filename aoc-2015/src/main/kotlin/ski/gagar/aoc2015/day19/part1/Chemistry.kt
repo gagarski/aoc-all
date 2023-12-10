@@ -57,11 +57,3 @@ fun countReplacement(strings: Sequence<String>): Int {
 
     return from.getAllReplacements(replacements).size
 }
-
-fun day19Part1() {
-    println("day19/part1/chemistry: ${
-        countReplacement(
-            getResourceAsStream("/ski.gagar.aoc.aoc2015.day19/chemistry.txt").bufferedReader().lineSequence()
-        )
-    }")
-}

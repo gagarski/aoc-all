@@ -58,17 +58,7 @@ object ScratchCardParser {
     fun parse(input: String) = CARD.from(TOKENIZER, WHITESPACES).parse(input)
 }
 
-private fun sumPoints(lines: Sequence<String>) =
+fun sumPoints(lines: Sequence<String>) =
     lines.map {
         ScratchCardParser.parse(it).points
     }.sum()
-
-fun day4Part1() {
-    println(
-        "day4/part1/scratchcards: ${
-            sumPoints(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day4/scratchcards.txt").bufferedReader().lineSequence()
-            )
-        }"
-    )
-}

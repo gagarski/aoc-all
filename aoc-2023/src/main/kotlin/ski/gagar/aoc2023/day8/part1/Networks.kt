@@ -119,12 +119,3 @@ object NetworkMapParser {
 
 fun nSteps(input: String, source: String = "AAA", dest: String = "ZZZ") =
     NetworkMapParser.parse(input).followLen(source, dest)
-
-fun day8Part1() {
-    println(
-        "day8/part1/networks: ${
-            nSteps(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day8/networks.txt").bufferedReader().readText())
-        }"
-    )
-}

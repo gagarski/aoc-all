@@ -60,11 +60,3 @@ fun countSteps(strings: Sequence<String>, init: String = "e"): Int {
 
     return if (bld.toString() == init) steps else -1
 }
-
-fun day19Part2() {
-    println("day19/part2/chemistry: ${
-        countSteps(
-            getResourceAsStream("/ski.gagar.aoc.aoc2015.day19/chemistry.txt").bufferedReader().lineSequence()
-        )
-    }")
-}

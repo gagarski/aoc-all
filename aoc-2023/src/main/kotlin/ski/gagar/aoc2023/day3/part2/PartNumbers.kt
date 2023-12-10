@@ -111,17 +111,7 @@ class Board(lines: Sequence<String>) {
     }
 }
 
-private fun gearRatio(lines: Sequence<String>) =
+fun gearRatio(lines: Sequence<String>) =
     Board(lines).getGearedPairs().asSequence().map {
         it.first.toLong() * it.second.toLong()
     }.sum()
-
-fun day3Part2() {
-    println(
-        "day3/part2/partNumbers: ${
-            gearRatio(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day3/board.txt").bufferedReader().lineSequence()
-            )
-        }"
-    )
-}

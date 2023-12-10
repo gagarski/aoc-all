@@ -205,12 +205,3 @@ fun makeCircuitAndEvaluateThenReassign(strings: Sequence<String>, signal: String
     circuit.assign(Assignment(toReassign, NumberExpression(value)))
     return circuit.evaluate(signal)
 }
-
-fun day7Part2() {
-    println(
-        "day7/part2/circuits: ${
-            makeCircuitAndEvaluateThenReassign(
-                getResourceAsStream("/ski.gagar.aoc.aoc2015.day7/circuits.txt").bufferedReader().lineSequence())
-        }"
-    )
-}

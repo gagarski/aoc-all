@@ -12,15 +12,6 @@ private val Game.minSet: Round
 private val Round.power
     get() = red * green * blue
 
-private fun sumPowers(lines: Sequence<String>) =
+fun sumPowers(lines: Sequence<String>) =
     lines.map { CubeGameParser.parse(it).minSet.power }
         .sum()
-
-fun day2Part2() {
-    println(
-        "day2/part2/cubes: ${
-            sumPowers(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day2/cubes.txt").bufferedReader().lineSequence())
-        }"
-    )
-}

@@ -131,9 +131,3 @@ fun String.nextCompliantPassword(
     } while (!password.isCompliant(range, passwordLength, growingLength, forbiddenChars, repeatedLength, repeatedCount))
     return password
 }
-
-fun day11Part1() {
-    println("day11/part1/passwords: ${
-        getResourceAsStream("/ski.gagar.aoc.aoc2015.day11/passwords.txt").bufferedReader().lineSequence().first().nextCompliantPassword()
-    }")
-}

@@ -123,13 +123,3 @@ fun multiplyOfNWinningOptions(input: String) =
     BoatRacesParser.parse(input).asSequence().map {
         it.nWinningOptions
     }.fold(1L) { a, b -> a * b }
-
-fun day6Part1() {
-    println(
-        "day6/part1/boatRaces: ${
-            multiplyOfNWinningOptions(
-                getResourceAsStream("/ski.gagar.aoc.aoc2023.day6/boatRaces.txt").bufferedReader().readText()
-            )
-        }"
-    )
-}

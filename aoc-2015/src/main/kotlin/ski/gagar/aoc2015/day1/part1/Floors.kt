@@ -15,11 +15,3 @@ fun floors(input: String): Int {
     }
     return floor
 }
-
-fun day1Part1() {
-    println(
-        "day1/part1/floors: ${
-            floors(getResourceAsStream("/ski.gagar.aoc.aoc2015.day1/floors.txt").bufferedReader().lineSequence().first())
-        }"
-    )
-}

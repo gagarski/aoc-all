@@ -195,12 +195,3 @@ object CircuitParser {
 
 fun makeCircuitAndEvaluate(strings: Sequence<String>, signal: String = "a") =
     LogicalCircuit(strings.map { CircuitParser.parse(it) }.asIterable()).evaluate(signal)
-
-fun day7Part1() {
-    println(
-        "day7/part1/circuits: ${
-            makeCircuitAndEvaluate(
-                getResourceAsStream("/ski.gagar.aoc.aoc2015.day7/circuits.txt").bufferedReader().lineSequence())
-        }"
-    )
-}
