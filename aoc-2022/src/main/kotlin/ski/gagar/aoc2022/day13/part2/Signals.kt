@@ -16,9 +16,3 @@ fun getIndicesOfDivider(seq: Sequence<String>): Int {
 
     return (signals.indexOf(DIVIDER_1) + 1) * (signals.indexOf(DIVIDER_2) + 1)
 }
-
-fun day13Part2() {
-    println("day13/part2/signals: ${
-        getIndicesOfDivider(getResourceAsStream("/ski.gagar.aoc.aoc2022.day13/signals.txt").bufferedReader().lineSequence())
-    }")
-}

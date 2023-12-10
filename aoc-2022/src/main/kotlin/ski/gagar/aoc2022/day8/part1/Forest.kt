@@ -76,9 +76,3 @@ class Forest(private val trees: List<List<Int>>) {
 
 fun nVisible(strings: Sequence<String>) =
     Forest(strings.map { it.map { c -> c - '0' } }.toList()).nVisible()
-
-fun day8Part1() {
-    println("day8/part1/forest: ${
-        nVisible(getResourceAsStream("/ski.gagar.aoc.aoc2022.day8/forest.txt").bufferedReader().lineSequence())
-    }")
-}

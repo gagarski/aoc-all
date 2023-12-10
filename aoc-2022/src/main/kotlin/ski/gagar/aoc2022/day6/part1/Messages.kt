@@ -41,9 +41,3 @@ fun startOffset(string: String, nDifferent: Int = 4): Int {
 
     return -1
 }
-
-fun day6Part1() {
-    println("day6/part1/messages: ${
-        startOffset(getResourceAsStream("/ski.gagar.aoc.aoc2022.day6/messages.txt").bufferedReader().lineSequence().first())
-    }")
-}

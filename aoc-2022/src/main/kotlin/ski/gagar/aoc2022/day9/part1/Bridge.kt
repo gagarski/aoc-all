@@ -86,8 +86,3 @@ fun doMoves(strings: Sequence<String>): Int {
     return bridge.tailHistorySize
 }
 
-fun day9Part1() {
-    println("day9/part1/bridge: ${
-        doMoves(getResourceAsStream("/ski.gagar.aoc.aoc2022.day9/bridge.txt").bufferedReader().lineSequence())
-    }")
-}

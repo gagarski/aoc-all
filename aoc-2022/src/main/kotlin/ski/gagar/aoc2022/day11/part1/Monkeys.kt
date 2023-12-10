@@ -271,11 +271,3 @@ fun run(specs: String, n: Int = 20, top: Int = 2): Int {
     
     return boat.result.asSequence().sortedByDescending { it.value }.map { it.value }.take(top).fold(1) { a, b -> a * b }
 }
-
-fun day11Part1() {
-    println("day11/part1/monkeys: \n${
-        run(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day11/monkeys.txt").bufferedReader().readText()
-        )
-    }")
-}

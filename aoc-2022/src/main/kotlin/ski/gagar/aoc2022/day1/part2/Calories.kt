@@ -22,11 +22,3 @@ fun calories(strings: Sequence<String>, n: Int = 3): Int {
 
     return set.take(n).sum()
 }
-
-fun day1Part2() {
-    println(
-        "day1/part2/calories: ${
-            calories(getResourceAsStream("/ski.gagar.aoc.aoc2022.day1/calories.txt").bufferedReader().lineSequence(), 3)
-        }"
-    )
-}

@@ -17,11 +17,3 @@ fun List<Blueprint>.quality(
 
     return q
 }
-
-fun day19Part2() {
-    println("day19/part2/robots: ${
-        RobotsParser.parse(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day19/robots.txt").bufferedReader().readText()
-        ).quality()
-    }")
-}

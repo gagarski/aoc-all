@@ -296,11 +296,3 @@ fun findQuickestLength(
         endPosition = Coordinates(endX, endY)
     )!!.moves.size
 }
-
-fun day24Part1() {
-    println("day24/part1/plants: \n${
-        findQuickestLength(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day24/blizzards.txt").bufferedReader().lineSequence()
-        )
-    }")
-}

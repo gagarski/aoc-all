@@ -190,11 +190,3 @@ fun evaluate(input: String, variable: String = "root"): Long {
     val calc = MonkeyCalculator(ExpressionParser.parse(input))
     return calc.evaluate(variable)
 }
-
-fun day21Part1() {
-    println("day21/part1/monkeys: \n${
-        evaluate(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day21/monkeys.txt").bufferedReader().readText()
-        )
-    }")
-}

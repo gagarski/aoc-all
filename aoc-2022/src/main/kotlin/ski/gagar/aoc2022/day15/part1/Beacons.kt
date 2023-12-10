@@ -168,8 +168,3 @@ fun shadowSizeForRow(text: String, row: Int = 2000000): Int {
 
     return bitSet.cardinality()
 }
-fun day15Part1() {
-    println("day15/part1/beacons: ${
-        shadowSizeForRow(getResourceAsStream("/ski.gagar.aoc.aoc2022.day15/beacons.txt").bufferedReader().readText())
-    }")
-}

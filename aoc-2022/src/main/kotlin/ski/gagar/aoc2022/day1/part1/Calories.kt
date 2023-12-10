@@ -22,11 +22,3 @@ fun calories(strings: Sequence<String>): Int {
 
     return max
 }
-
-fun day1Part1() {
-    println(
-        "day1/part1/calories: ${
-            calories(getResourceAsStream("/ski.gagar.aoc.aoc2022.day1/calories.txt").bufferedReader().lineSequence())
-        }"
-    )
-}

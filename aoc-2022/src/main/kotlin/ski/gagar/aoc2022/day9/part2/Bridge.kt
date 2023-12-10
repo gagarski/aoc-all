@@ -105,12 +105,6 @@ fun doMoves(strings: Sequence<String>): Int {
     return bridge.tailHistorySize
 }
 
-fun day9Part2() {
-    println("day9/part2/bridge: ${
-        doMoves(getResourceAsStream("/ski.gagar.aoc.aoc2022.day9/bridge.txt").bufferedReader().lineSequence())
-    }")
-}
-
 fun Bridge.toString(width: Int, height: Int): String {
     val knots = (0 until  nKnots).map { it to knotAt(it) }.toMap()
     val knotsRev = sequence {
@@ -132,29 +126,4 @@ fun Bridge.toString(width: Int, height: Int): String {
             append("\n")
         }
     }
-}
-
-fun main() {
-    val bridge = Bridge(11 to 15)
-    println(bridge.toString(26, 21))
-
-    val moves = listOf(
-        Move(Direction.R, 5),
-        Move(Direction.U, 8),
-        Move(Direction.L, 8),
-        Move(Direction.D, 3),
-        Move(Direction.R, 17),
-        Move(Direction.D, 10),
-        Move(Direction.L, 25),
-        Move(Direction.U, 20),
-    )
-
-    for (move in moves) {
-        println(move)
-        with (move) {
-            bridge.move()
-        }
-        println(bridge.toString(26, 21))
-    }
-    println(bridge.tailHistorySize)
 }

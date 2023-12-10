@@ -22,9 +22,3 @@ fun freeUp(sequence: Sequence<String>, total: Int = 70000000, minUnused: Int = 3
         .first { total - used + it.size_ >= minUnused }
         .size()
 }
-
-fun day7Part2() {
-    println("day7/part2/console: ${
-        freeUp(getResourceAsStream("/ski.gagar.aoc.aoc2022.day7/console.txt").bufferedReader().lineSequence())
-    }")
-}

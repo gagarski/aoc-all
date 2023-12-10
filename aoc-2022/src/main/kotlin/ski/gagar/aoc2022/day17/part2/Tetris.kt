@@ -355,11 +355,3 @@ fun getMaxHeight(input: String, nMoves: Long = 1000000000000L): Long {
 
     return height
 }
-
-fun day17Part2() {
-    println("day17/part2/tetris: ${
-        getMaxHeight(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day17/tetris.txt").bufferedReader().lineSequence().first()
-        )
-    }")
-}

@@ -276,9 +276,3 @@ fun run(specs: String, n: Int = 10000, top: Int = 2): Long {
 
 val Int.big
     get() = BigInteger(this.toString())
-
-fun day11Part2() {
-    println("day11/part2/monkeys: \n${
-        run(getResourceAsStream("/ski.gagar.aoc.aoc2022.day11/monkeys.txt").bufferedReader().readText())
-    }")
-}

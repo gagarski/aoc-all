@@ -30,10 +30,3 @@ data class Rucksack(val first: Set<Char>, val second: Set<Char>) {
 
 fun sumPriorities(strings: Sequence<String>) =
     strings.sumOf { Rucksack.parse(it).intersectionPriority }
-
-
-fun day3Part1() {
-    println("day3/part1/rucksacks: ${
-        sumPriorities(getResourceAsStream("/ski.gagar.aoc.aoc2022.day3/rucksacks.txt").bufferedReader().lineSequence())
-    }")
-}

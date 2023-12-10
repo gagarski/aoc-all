@@ -114,9 +114,3 @@ fun countStrength(lines: Sequence<String>, period: Int = 40, phase: Int = 20, nP
 
     return strength
 }
-
-fun day10Part1() {
-    println("day10/part1/crt: ${
-        countStrength(getResourceAsStream("/ski.gagar.aoc.aoc2022.day10/cathode.txt").bufferedReader().lineSequence())
-    }")
-}

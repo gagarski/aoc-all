@@ -140,11 +140,3 @@ fun processCubes(lines: Sequence<String>): Int {
 
     return sides.asSequence().filter { (k, v) -> v == 1 }.sumOf { (k, _) -> k.area() }
 }
-
-fun day18Part2() {
-    println("day18/part2/cubes: ${
-        processCubes(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day18/cubes.txt").bufferedReader().lineSequence()
-        )
-    }")
-}

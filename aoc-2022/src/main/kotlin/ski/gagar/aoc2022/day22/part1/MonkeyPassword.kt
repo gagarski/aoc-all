@@ -222,12 +222,3 @@ fun evaluate(input: String): Int {
         Direction.UP -> 3
     }
 }
-
-
-fun day22Part1() {
-    println("day212part1/field: \n${
-        evaluate(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day22/field.txt").bufferedReader().readText()
-        )
-    }")
-}

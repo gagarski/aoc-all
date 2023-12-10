@@ -171,11 +171,3 @@ fun getNPlants(lines: Sequence<String>, nSteps: Int = 10): Int {
     field.steps(10)
     return field.nFreeCells()
 }
-
-fun day23Part1() {
-    println("day23/part1/plants: \n${
-        getNPlants(
-            getResourceAsStream("/ski.gagar.aoc.aoc2022.day23/plants.txt").bufferedReader().lineSequence()
-        )
-    }")
-}
