@@ -100,7 +100,6 @@ enum class BeamItem(private val char: Char) {
 class BeamField(items: Map<Coordinates, BeamItem>, val width: Int, val height: Int) {
     val items = items.filter { it.value != BeamItem.NOTHING }
 
-
     private fun BeamPosition.isInside() =
         coordinates.x in 0 until width && coordinates.y in 0 until height
 
