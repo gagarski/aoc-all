@@ -39,16 +39,24 @@ fun Circuit.tryCapture(initPulse: Pulse = Pulse(), c: Captured = Captured()): Bo
     return false
 }
 
-fun Circuit.tryCaptureLast(c: CapturedWithSource, initPulse: Pulse = Pulse()): Boolean {
-    val queue = ArrayDeque<Pulse>()
-    queue.add(initPulse)
+private data class QueueItem(val pulse: Pulse, val time: Int = 0)
 
-    var captured = false
+fun Circuit.tryCaptureLast(c: CapturedWithSource, initPulse: Pulse = Pulse()): IntRange? {
+    val queue = ArrayDeque<QueueItem>()
+    queue.add(QueueItem(initPulse))
+
+    var lastTime = -1
+    var capturedStart = -1
+    var capturedEnd = -1
 
     while (queue.isNotEmpty()) {
-        val processed = queue.removeFirst()
+        val (processed, layer) = queue.removeFirst()
+        lastTime = layer
         if (processed.matchesSource(c)) {
-            captured = true
+            capturedStart = layer
+            capturedEnd = -1
+        } else if (processed.unmatchesSource(c) && capturedEnd == -1) {
+            capturedEnd = layer
         }
 
         val elem = gates[processed.destination]
@@ -58,10 +66,15 @@ fun Circuit.tryCaptureLast(c: CapturedWithSource, initPulse: Pulse = Pulse()): B
         val newSource = processed.destination
 
         for (newDest in wires[newSource] ?: setOf()) {
-            queue.add(Pulse(newSource, newDest, pulse))
+            queue.add(QueueItem(Pulse(newSource, newDest, pulse), layer + 1))
         }
     }
-    return captured
+
+    if (capturedStart != -1 && capturedEnd == -1) {
+        capturedEnd = lastTime
+    }
+
+    return if (capturedStart != -1) capturedStart..capturedEnd else null
 }
 
 fun Map<String, Set<String>>.collectInputs(dest: String, start: String = "broadcaster"): Set<String> {
@@ -121,25 +134,39 @@ fun Circuit.nPressesLastConjNeg(
         prevInputs.addAll(current)
     }
 
-    return conj.inputs.fold(BigInteger.ONE) { acc, input ->
-        acc.lcm(BigInteger.valueOf(findPositivePulsePattern(input, conj.name, initPulse = initPulse).toLong()))
+    val patterns = conj.inputs.map {
+        findPositivePulsePattern(it, conj.name, initPulse = initPulse)
+    }
+
+    val lastStart = patterns.maxOf { it.posRange.first }
+    val firstEnd = patterns.minOf { it.posRange.last }
+
+    if (firstEnd < lastStart) {
+        throw IllegalStateException("Even though positive patterns found, " +
+                "the ranges for them inside iteration are not intersecting")
+    }
+
+    return patterns.fold(BigInteger.ONE) { acc, input ->
+        acc.lcm(BigInteger.valueOf(input.iters.toLong()))
     }
 }
 
 fun BigInteger.lcm(other: BigInteger) =
     this / this.gcd(other) * other
 
-fun Circuit.findPositivePulsePattern(source: String, dest: String, limit: Int = 1000000, initPulse: Pulse = Pulse()): Int {
+data class LoopSummary(val iters: Int, val posRange: IntRange)
+
+fun Circuit.findPositivePulsePattern(source: String, dest: String, limit: Int = 1000000, initPulse: Pulse = Pulse()): LoopSummary {
     reset()
-    val iters = mutableListOf<Int>()
+    val mem = mutableListOf<LoopSummary>()
     var i = 0
 
     while (true) {
         val captured = tryCaptureLast(CapturedWithSource(source, dest, true), initPulse)
         i++
-        if (captured) {
-            iters.add(i)
-            if (iters.size == 3)
+        if (captured != null) {
+            mem.add(LoopSummary(i, captured))
+            if (mem.size == 3)
                 break
         }
 
@@ -148,11 +175,15 @@ fun Circuit.findPositivePulsePattern(source: String, dest: String, limit: Int = 
         }
     }
 
-    check(iters[1] - iters[0] == iters[2] - iters[1]) {
+    check(mem[1].iters - mem[0].iters == mem[2].iters - mem[1].iters) {
         "failed to find positive pulse pattern for $source"
     }
 
-    return iters[1] - iters[0]
+    check(mem.all { it.posRange == mem.first().posRange }) {
+        "failed to find positive pulse pattern for $source"
+    }
+
+    return mem[0]
 }
 
 fun Circuit.nPresses(initPulse: Pulse = Pulse(), c: Captured = Captured()): Int {
