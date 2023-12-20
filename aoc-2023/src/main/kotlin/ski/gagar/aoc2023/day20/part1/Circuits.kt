@@ -50,10 +50,21 @@ class Junction(override val name: String): Gate {
 }
 
 enum class GateType {
-    FLIP_FLOP, CONJUNCTOR, JUNCTION
+    FLIP_FLOP {
+        override val mnemonic: String = "%"
+    }, CONJUNCTOR {
+        override val mnemonic: String = "&"
+    }, JUNCTION {
+        override val mnemonic: String = ""
+    };
+
+    abstract val mnemonic: String
 }
 
-data class Wiring(val type: GateType, val name: String, val outputs: Set<String>)
+data class Wiring(val type: GateType, val name: String, val outputs: Set<String>) {
+    val mnemonic: String
+        get() = "${type.mnemonic}$name"
+}
 
 data class PulseCounter(val positive: Int = 0, val negative: Int = 0) {
     operator fun plus(other: PulseCounter) = PulseCounter(
