@@ -9,6 +9,6 @@ object Day20 : Puzzle {
     override val name: String = "Pulse Propagation"
     override val inputPath: String = "/ski.gagar.aoc.aoc2023.day20/circuit.txt"
 
-//    override fun part1(input: InputStream) = countSignals(input.bufferedReader().readText())
+    override fun part1(input: InputStream) = countSignals(input.bufferedReader().readText())
     override fun part2(input: InputStream) = nPresses(input.bufferedReader().readText())
 }

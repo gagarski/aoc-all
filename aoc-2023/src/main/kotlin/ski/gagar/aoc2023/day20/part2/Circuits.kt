@@ -64,7 +64,35 @@ fun Circuit.tryCaptureLast(c: CapturedWithSource, initPulse: Pulse = Pulse()): B
     return captured
 }
 
-fun Circuit.nPressesLastConjNeg(target: String = "rx", initPulse: Pulse = Pulse()): BigInteger {
+fun Map<String, Set<String>>.collectInputs(dest: String, start: String = "broadcaster"): Set<String> {
+    val queue = ArrayDeque<String>()
+    queue.add(dest)
+
+    val res = mutableSetOf<String>()
+
+    while (queue.isNotEmpty()) {
+        val current = queue.removeFirst()
+        if (current == start) continue
+
+        if (current in res) continue
+
+        res.add(current)
+
+        val currentInputs = this[current] ?: setOf()
+
+        for (input in currentInputs) {
+            queue.add(input)
+        }
+    }
+
+    return res
+}
+
+fun Circuit.nPressesLastConjNeg(
+    target: String = "rx",
+    start: String = "broadcaster",
+    initPulse: Pulse = Pulse()
+): BigInteger {
     require(gates[target] == null)
     val leadingToTarget = wires.filter { (k, v) -> target in v }
     require(leadingToTarget.size == 1)
@@ -72,10 +100,34 @@ fun Circuit.nPressesLastConjNeg(target: String = "rx", initPulse: Pulse = Pulse(
 
     require(conj is Conjunctor)
 
+    val inputs = wires
+        .flatMap {(source, dests) ->
+            dests.map { it to source }
+        }.groupBy {
+            it.second
+        }.mapValues { (k, v) ->
+            v.asSequence().map { it.second }.toSet()
+        }
+
+    var prevInputs = mutableSetOf<String>()
+
+    for (conjInput in conj.inputs) {
+        val current = inputs.collectInputs(conjInput, start)
+
+        if (current.any { it in prevInputs }) {
+            throw IllegalStateException("Input $conjInput has a source from multiple parts of the" +
+                    " scheme, this algorithm won't work")
+        }
+        prevInputs.addAll(current)
+    }
+
     return conj.inputs.fold(BigInteger.ONE) { acc, input ->
-        acc * BigInteger.valueOf(findPositivePulsePattern(input, conj.name, initPulse = initPulse).toLong())
+        acc.lcm(BigInteger.valueOf(findPositivePulsePattern(input, conj.name, initPulse = initPulse).toLong()))
     }
 }
+
+fun BigInteger.lcm(other: BigInteger) =
+    this / this.gcd(other) * other
 
 fun Circuit.findPositivePulsePattern(source: String, dest: String, limit: Int = 1000000, initPulse: Pulse = Pulse()): Int {
     reset()
