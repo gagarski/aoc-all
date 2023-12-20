@@ -53,6 +53,9 @@ fun Circuit.tryCaptureLast(c: CapturedWithSource, initPulse: Pulse = Pulse()): I
         val (processed, layer) = queue.removeFirst()
         lastTime = layer
         if (processed.matchesSource(c)) {
+            if (capturedStart != -1) {
+                throw IllegalStateException("Should have only one spike of ${c.source}")
+            }
             capturedStart = layer
             capturedEnd = -1
         } else if (processed.unmatchesSource(c) && capturedEnd == -1) {
