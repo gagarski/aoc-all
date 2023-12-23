@@ -1,9 +1,7 @@
 package ski.gagar.aoc.util
 
 import kotlinx.collections.immutable.PersistentMap
-import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.persistentSetOf
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.ArrayDeque
@@ -192,16 +190,21 @@ class GenericGraph<V>(
         return res.reversed()
     }
 
+    private sealed interface DfsOrdersStackItem<V> {
+        data class ProcessVertex<V>(val vertex: V) : DfsOrdersStackItem<V>
+        data class PushToPostOrder<V>(val vertex: V) : DfsOrdersStackItem<V>
+    }
+
     private fun dfsOrders(from: V, visited: MutableSet<V>): DfsOrders<V> {
-        val stack = ArrayDeque<OrdersStackItem<V>>()
+        val stack = ArrayDeque<DfsOrdersStackItem<V>>()
         val preOrder = mutableListOf<V>()
         val postOrder = mutableListOf<V>()
-        stack.add(ProcessVertex(from))
+        stack.add(DfsOrdersStackItem.ProcessVertex(from))
         while (stack.isNotEmpty()) {
             val stackItem = stack.removeFirst()
             when (stackItem) {
-                is PushToPostOrder<V> -> postOrder.add(stackItem.vertex)
-                is ProcessVertex<V> -> {
+                is DfsOrdersStackItem.PushToPostOrder<V> -> postOrder.add(stackItem.vertex)
+                is DfsOrdersStackItem.ProcessVertex<V> -> {
                     val v = stackItem.vertex
                     if (v in visited)
                         continue
@@ -210,9 +213,9 @@ class GenericGraph<V>(
                         continue
                     visited.add(v)
 
-                    stack.addFirst(PushToPostOrder(v))
+                    stack.addFirst(DfsOrdersStackItem.PushToPostOrder(v))
                     for (to in getEdgesFrom(v).keys) {
-                        stack.addFirst(ProcessVertex(to))
+                        stack.addFirst(DfsOrdersStackItem.ProcessVertex(to))
                     }
                 }
             }
@@ -222,10 +225,6 @@ class GenericGraph<V>(
 
         return DfsOrders(preOrder, postOrder)
     }
-
-    private sealed interface OrdersStackItem<V>
-    data class ProcessVertex<V>(val vertex: V) : OrdersStackItem<V>
-    data class PushToPostOrder<V>(val vertex: V) : OrdersStackItem<V>
 
     private fun dfsOrders(): DfsOrders<V> {
         val visited = mutableSetOf<V>()
@@ -275,41 +274,57 @@ class GenericGraph<V>(
         return GenericShortestPaths(from, paths.keys.asSequence().map { it to tracePath(paths, from, it) }.toMap())
     }
 
-    private data class LongestPathStackItem<V>(
-        val current: V,
-        val history: PersistentSet<V> = persistentSetOf(),
-        val len: Int = 0
-    )
+    private sealed interface LongestPathStackItem<V> {
+        data class ProcessVertex<V>(
+            val current: V,
+            val len: Int = 0
+        ) : LongestPathStackItem<V>
+        data class PopVertex<V>(val vertex: V) : LongestPathStackItem<V>
+    }
+
+
 
     fun longestPath(from: V, to: V): List<GenericEdge<V>>? {
         val stack = ArrayDeque<LongestPathStackItem<V>>()
-        stack.addFirst(LongestPathStackItem(from))
+        stack.addFirst(LongestPathStackItem.ProcessVertex(from))
 
-        var longestSoFar: PersistentSet<V>? = null
         var maxLengthSoFar: Int? = null
-        var i = 0
+        var maxPathSoFar: MutableSet<V>? = null
+        val path = linkedSetOf<V>()
+        path.add(from)
+
         while (stack.isNotEmpty()) {
-            i++
-            val (current, history, len) = stack.removeFirst()
+            val op = stack.removeFirst()
 
-            if (current == to) {
-                val currentLength = len
+            when (op) {
+                is LongestPathStackItem.PopVertex -> path.removeLast()
+                is LongestPathStackItem.ProcessVertex -> {
+                    val (current, len) = op
 
-                if (maxLengthSoFar == null || currentLength > maxLengthSoFar) {
-                    maxLengthSoFar = currentLength
-                    longestSoFar = history
+                    if (current == to) {
+                        val currentLength = len
+
+                        if (maxLengthSoFar == null || currentLength > maxLengthSoFar) {
+                            maxLengthSoFar = currentLength
+                            maxPathSoFar = linkedSetOf()
+                            maxPathSoFar.addAll(path)
+                        }
+                    }
+                    path.add(current)
+                    stack.addFirst(LongestPathStackItem.PopVertex(current))
+                    for ((nextV, nextE) in getEdgesFrom(current)) {
+                        if (nextV == current || nextV in path) continue
+                        stack.addFirst(LongestPathStackItem.ProcessVertex(nextV, len + nextE.weight))
+                    }
                 }
             }
 
-            for ((nextV, nextE) in getEdgesFrom(current)) {
-                if (nextV == current || nextV in history) continue
-                stack.addFirst(LongestPathStackItem(nextV, history.add(current), len + nextE.weight))
-            }
         }
 
-        longestSoFar = longestSoFar?.add(to)
 
-        return longestSoFar?.asSequence()?.zipWithNext()?.map { (from, to) ->
+        maxPathSoFar?.add(to)
+
+        return maxPathSoFar?.asSequence()?.zipWithNext()?.map { (from, to) ->
             getEdge(from, to)!!
         }?.toList()
     }
@@ -320,4 +335,12 @@ class GenericGraph<V>(
     }
     data class Cycle<V>(val elems: List<V>)
 
+}
+
+fun main() {
+    val b = GenericGraphBuilder<String>()
+    b.addVertex("a")
+    b.addVertex("b")
+    b.addEdge("a", "b")
+    println(b.build().longestPath("a", "b"))
 }
