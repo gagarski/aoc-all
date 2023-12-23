@@ -15,6 +15,8 @@ import ski.gagar.aoc2023.day18.Day18
 import ski.gagar.aoc2023.day19.Day19
 import ski.gagar.aoc2023.day2.Day2
 import ski.gagar.aoc2023.day20.Day20
+import ski.gagar.aoc2023.day21.Day21
+import ski.gagar.aoc2023.day22.Day22
 import ski.gagar.aoc2023.day3.Day3
 import ski.gagar.aoc2023.day4.Day4
 import ski.gagar.aoc2023.day5.Day5
@@ -45,7 +47,9 @@ object Aoc2023 : Contest {
 //            Day17,
 //            Day18,
 //            Day19
-            Day20
+//            Day20
+            Day21,
+//            Day22
         )
 }
 

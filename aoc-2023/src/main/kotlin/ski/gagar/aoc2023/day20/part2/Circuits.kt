@@ -48,10 +48,20 @@ fun Circuit.tryCaptureLast(c: CapturedWithSource, initPulse: Pulse = Pulse()): I
     var lastTime = -1
     var capturedStart = -1
     var capturedEnd = -1
+    val pulsesByLayer = mutableMapOf<Int, MutableSet<String>>()
 
     while (queue.isNotEmpty()) {
         val (processed, layer) = queue.removeFirst()
         lastTime = layer
+
+        val forLayer = pulsesByLayer[layer] ?: mutableSetOf()
+
+        if (processed.source in forLayer) {
+            throw IllegalStateException("Multiple pulses for ${processed.source} detected at time $layer")
+        }
+
+        pulsesByLayer[layer] = forLayer
+
         if (processed.matchesSource(c)) {
             if (capturedStart != -1) {
                 throw IllegalStateException("Should have only one spike of ${c.source}")
