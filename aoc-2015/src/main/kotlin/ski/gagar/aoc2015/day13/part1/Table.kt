@@ -4,26 +4,25 @@ import org.jparsec.Parsers
 import org.jparsec.Scanners
 import org.jparsec.Terminals
 import org.jparsec.pattern.CharPredicates
-import ski.gagar.aoc.util.Edge
-import ski.gagar.aoc.util.Graph
-import ski.gagar.aoc.util.GraphBuilder
-import ski.gagar.aoc.util.getResourceAsStream
+import ski.gagar.aoc.util.StringEdge
+import ski.gagar.aoc.util.StringGraph
+import ski.gagar.aoc.util.StringGraphBuilder
 
 
 data class NextPath(
-    val edge: Edge,
+    val edge: StringEdge,
     val visited: Set<String>,
-    val path: List<Edge> = listOf(),
+    val path: List<StringEdge> = listOf(),
 ) {
     val length = path.sumOf { it.weight }
 }
 
-val List<Edge>.pathLength
+val List<StringEdge>.pathLength
     get() = sumOf { it.weight }
 
-fun Graph.getLongestPathFrom(vertex: String, longestLengthSoFar: Int? = null): List<Edge>? {
+fun StringGraph.getLongestPathFrom(vertex: String, longestLengthSoFar: Int? = null): List<StringEdge>? {
     var longestPathSoFar = longestLengthSoFar
-    var longestPathLocal: List<Edge>? = null
+    var longestPathLocal: List<StringEdge>? = null
     val stack = ArrayDeque<NextPath>()
 
 
@@ -58,7 +57,7 @@ fun Graph.getLongestPathFrom(vertex: String, longestLengthSoFar: Int? = null): L
     return longestPathLocal
 }
 
-fun Graph.findLongestPath(): List<Edge>? = getLongestPathFrom(vertices.first(), null)
+fun StringGraph.findLongestPath(): List<StringEdge>? = getLongestPathFrom(vertices.first(), null)
 
 data class SittingCondition(val first: String, val second: String, val weight: Int)
 
@@ -143,8 +142,8 @@ object TableParser {
     fun parse(text: String) = SEAT.parse(text)
 }
 
-fun sittingGraph(strings: Sequence<String>): Graph {
-    val builder = GraphBuilder()
+fun sittingGraph(strings: Sequence<String>): StringGraph {
+    val builder = StringGraphBuilder()
     for (string in strings) {
         val cond = TableParser.parse(string)
         val currentWeightDirect = builder.getEdge(cond.first, cond.second)?.weight ?: 0

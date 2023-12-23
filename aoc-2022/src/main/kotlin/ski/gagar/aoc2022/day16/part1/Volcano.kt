@@ -7,9 +7,8 @@ import kotlinx.collections.immutable.persistentSetOf
 import org.jparsec.Parsers
 import org.jparsec.Scanners
 import org.jparsec.Terminals
-import ski.gagar.aoc.util.Graph
-import ski.gagar.aoc.util.GraphBuilder
-import ski.gagar.aoc.util.getResourceAsStream
+import ski.gagar.aoc.util.StringGraph
+import ski.gagar.aoc.util.StringGraphBuilder
 import java.util.*
 
 data class VolcanoNode(val name: String, val flowRate: Int, val neighbors: List<String>)
@@ -89,7 +88,7 @@ private data class State(
     val openedValves: PersistentSet<String>,
     val movesLeft: Int,
     val allNodes: Map<String, VolcanoNode>,
-    val reducedGraph: Graph,
+    val reducedGraph: StringGraph,
     val expansions: Map<Pair<String, String>, ShortestPath>
 )
 
@@ -145,7 +144,7 @@ fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit
         }
     }
 
-    val bld = GraphBuilder()
+    val bld = StringGraphBuilder()
 
     for (node in meaningfulNodes) {
         bld.addVertex(node.name)

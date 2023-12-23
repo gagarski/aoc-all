@@ -4,15 +4,13 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import ski.gagar.aoc.util.Graph
-import ski.gagar.aoc.util.GraphBuilder
-import ski.gagar.aoc.util.getResourceAsStream
+import ski.gagar.aoc.util.StringGraph
+import ski.gagar.aoc.util.StringGraphBuilder
 import ski.gagar.aoc2022.day16.part1.Move
 import ski.gagar.aoc2022.day16.part1.OpenCurrentValve
 import ski.gagar.aoc2022.day16.part1.ShortestPath
 import ski.gagar.aoc2022.day16.part1.VolcanoGraph
 import ski.gagar.aoc2022.day16.part1.VolcanoNode
-import ski.gagar.aoc2022.day16.part1.VolcanoParser
 import java.util.*
 
 data class CourseOfAction(
@@ -39,7 +37,7 @@ private data class State(
     val myMovesLeft: Int,
     val elephantMovesLeft: Int,
     val allNodes: Map<String, VolcanoNode>,
-    val reducedGraph: Graph,
+    val reducedGraph: StringGraph,
     val expansions: Map<Pair<String, String>, ShortestPath>
 )
 private data class NextMoveAndState(val move: ReducedMove, val state: State)
@@ -134,7 +132,7 @@ fun bestCourseOfAction(nodes: List<VolcanoNode>, startNode: String = "AA", limit
         }
     }
 
-    val bld = GraphBuilder()
+    val bld = StringGraphBuilder()
 
     for (node in meaningfulNodes) {
         bld.addVertex(node.name)

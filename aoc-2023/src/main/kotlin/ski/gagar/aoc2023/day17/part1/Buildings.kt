@@ -1,8 +1,7 @@
 package ski.gagar.aoc2023.day17.part1
 
-import ski.gagar.aoc.util.GenericEdge
-import ski.gagar.aoc.util.GenericGraphBuilder
-import java.util.*
+import ski.gagar.aoc.util.Edge
+import ski.gagar.aoc.util.GraphBuilder
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
@@ -55,11 +54,11 @@ class HeatMap(val heats: List<List<Int>>) {
     operator fun contains(coords: Coordinates) =
         coords.y in 0 until height && coords.x in 0 until width
 
-    private fun List<GenericEdge<Coordinates>>.sumWeight() =
+    private fun List<Edge<Coordinates>>.sumWeight() =
         sumOf { it.weight }
 
     fun shortestPath(from: Coordinates, to: Coordinates,
-                     maxStraight: Int = 3): List<GenericEdge<Coordinates>>? {
+                     maxStraight: Int = 3): List<Edge<Coordinates>>? {
         val shortestHv = shortestPath(from, to, maxStraight, this::weightHv, this::isOnLastMileHv)
         val shortestVh = shortestPath(from, to, maxStraight, this::weightVh, this::isOnLastMileVh)
 
@@ -92,8 +91,8 @@ class HeatMap(val heats: List<List<Int>>) {
                              to: Coordinates,
                              maxStraight: Int = 3,
                              weight: (Coordinates, Coordinates) -> Int,
-                             isOnLastMile: (Coordinates, Coordinates, Int) -> Boolean): List<GenericEdge<Coordinates>>? {
-        val bld = GenericGraphBuilder<Coordinates>()
+                             isOnLastMile: (Coordinates, Coordinates, Int) -> Boolean): List<Edge<Coordinates>>? {
+        val bld = GraphBuilder<Coordinates>()
         for (y in 0 until height) {
             for (x in 0 until width) {
                 bld.addVertex(Coordinates(x, y))
@@ -113,7 +112,7 @@ class HeatMap(val heats: List<List<Int>>) {
         return bld.build().shortestPaths(from).to(to)
     }
 
-    private fun GenericGraphBuilder<Coordinates>.connect(
+    private fun GraphBuilder<Coordinates>.connect(
         coordinates: Coordinates,
         maxStraight: Int,
         weight: (Coordinates, Coordinates) -> Int
