@@ -129,9 +129,9 @@ class GenericGraph<V>(
         edgesBySource.mapValues { (_, edge) -> GenericEdge(edge.from, edge.to, -edge.weight) }
     })
 
-    fun getFirstCycle(): Cycle<V>? = getCycles().firstOrNull()
+    fun getFirstCycle(): List<V>? = getCycles().firstOrNull()
 
-    fun getCycles(): Sequence<Cycle<V>> = sequence {
+    fun getCycles(): Sequence<List<V>> = sequence {
         val visited = mutableSetOf<V>()
 
         for (v in vertices) {
@@ -147,7 +147,7 @@ class GenericGraph<V>(
         data class PopVertex<V>(val vertex: V) : CycleStackItem<V>
     }
 
-    private fun getCycleFrom(from: V, globalVisited: MutableSet<V>): Sequence<Cycle<V>> = sequence {
+    private fun getCycleFrom(from: V, globalVisited: MutableSet<V>): Sequence<List<V>> = sequence {
         if (vertices.isEmpty()) return@sequence
 
         val stack = ArrayDeque<CycleStackItem<V>>()
@@ -173,7 +173,7 @@ class GenericGraph<V>(
                             val p = linkedSetOf<V>()
                             p.addAll(path)
 
-                            yield(Cycle(backtrack(to, v, p)))
+                            yield(backtrack(to, v, p))
                             continue
                         }
                         stack.addFirst(CycleStackItem.ProcessVertex(to))
@@ -288,8 +288,6 @@ class GenericGraph<V>(
         data class PopVertex<V>(val vertex: V) : LongestPathStackItem<V>
     }
 
-
-
     fun longestPath(from: V, to: V): List<GenericEdge<V>>? {
         val stack = ArrayDeque<LongestPathStackItem<V>>()
         stack.addFirst(LongestPathStackItem.ProcessVertex(from))
@@ -334,11 +332,10 @@ class GenericGraph<V>(
         }?.toList()
     }
 
-    data class DfsOrders<V>(val pre: List<V>, val post: List<V>) {
+    private data class DfsOrders<V>(val pre: List<V>, val post: List<V>) {
         operator fun plus(other: DfsOrders<V>) =
             DfsOrders(pre + other.pre, post + other.post)
     }
-    data class Cycle<V>(val elems: List<V>)
 
 }
 
