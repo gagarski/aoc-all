@@ -1,24 +1,23 @@
 package ski.gagar.aoc2015.day9.part2
 
-import ski.gagar.aoc.util.Edge
-import ski.gagar.aoc.util.Graph
-import ski.gagar.aoc.util.GraphBuilder
-import ski.gagar.aoc.util.getResourceAsStream
+import ski.gagar.aoc.util.StringEdge
+import ski.gagar.aoc.util.StringGraph
+import ski.gagar.aoc.util.StringGraphBuilder
 
 data class NextPath(
-    val edge: Edge,
+    val edge: StringEdge,
     val visited: Set<String>,
-    val path: List<Edge> = listOf(),
+    val path: List<StringEdge> = listOf(),
 ) {
     val length = path.sumOf { it.weight }
 }
 
-val List<Edge>.pathLength
+val List<StringEdge>.pathLength
     get() = sumOf { it.weight }
 
-fun Graph.getLongestPathFrom(vertex: String, shortestLengthSoFar: Int? = null): List<Edge>? {
+fun StringGraph.getLongestPathFrom(vertex: String, shortestLengthSoFar: Int? = null): List<StringEdge>? {
     var longestLengthSoFarLocal = shortestLengthSoFar
-    var longestPathLocal: List<Edge>? = null
+    var longestPathLocal: List<StringEdge>? = null
     val stack = ArrayDeque<NextPath>()
 
 
@@ -53,9 +52,9 @@ fun Graph.getLongestPathFrom(vertex: String, shortestLengthSoFar: Int? = null): 
     return longestPathLocal
 }
 
-fun Graph.findLongestPath(): List<Edge>? {
+fun StringGraph.findLongestPath(): List<StringEdge>? {
     var longestLengthSoFar: Int? = null
-    var longestpathSoFar: List<Edge>? = null
+    var longestpathSoFar: List<StringEdge>? = null
 
     for (vertx in vertices) {
         val path = getLongestPathFrom(vertx, longestLengthSoFar)
@@ -70,7 +69,7 @@ fun Graph.findLongestPath(): List<Edge>? {
 
 private val EDGE_RE = """(?<first>.*?) to (?<second>.*?) = (?<distance>[0-9]+)""".toRegex()
 
-fun GraphBuilder.addString(str: String) {
+fun StringGraphBuilder.addString(str: String) {
     val match = EDGE_RE.matchEntire(str)
     require(match != null)
     val groups = match.groups as MatchNamedGroupCollection
@@ -84,8 +83,8 @@ fun GraphBuilder.addString(str: String) {
     addNonDirectedEdge(first, second, distance)
 }
 
-fun buildGraph(strings: Sequence<String>): Graph {
-    val bld = GraphBuilder()
+fun buildGraph(strings: Sequence<String>): StringGraph {
+    val bld = StringGraphBuilder()
     for (str in strings) {
         bld.addString(str)
     }

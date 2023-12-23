@@ -1,7 +1,7 @@
 package ski.gagar.aoc2023.day23.part2
 
-import ski.gagar.aoc.util.GenericGraph
-import ski.gagar.aoc.util.GenericGraphBuilder
+import ski.gagar.aoc.util.Graph
+import ski.gagar.aoc.util.GraphBuilder
 import ski.gagar.aoc2023.day23.part1.Coordinates
 import ski.gagar.aoc2023.day23.part1.Direction
 
@@ -95,8 +95,8 @@ class TrailField(map: Map<Coordinates, CellType>, val width: Int, val height: In
         throw IllegalStateException("cannot walk")
     }
 
-    fun getGraph(from: Coordinates): GenericGraph<Coordinates> {
-        val bld = GenericGraphBuilder<Coordinates>()
+    fun getGraph(from: Coordinates): Graph<Coordinates> {
+        val bld = GraphBuilder<Coordinates>()
 
         val firstNeighbors = from.getNeighbors().toList()
         require(firstNeighbors.size == 1)

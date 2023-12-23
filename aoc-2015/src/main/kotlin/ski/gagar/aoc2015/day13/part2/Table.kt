@@ -1,14 +1,13 @@
 package ski.gagar.aoc2015.day13.part2
 
-import ski.gagar.aoc.util.Graph
-import ski.gagar.aoc.util.GraphBuilder
-import ski.gagar.aoc.util.getResourceAsStream
+import ski.gagar.aoc.util.StringGraph
+import ski.gagar.aoc.util.StringGraphBuilder
 import ski.gagar.aoc2015.day13.part1.TableParser
 import ski.gagar.aoc2015.day13.part1.findLongestPath
 import ski.gagar.aoc2015.day13.part1.pathLength
 
-fun sittingGraphWithMe(strings: Sequence<String>): Graph {
-    val builder = GraphBuilder()
+fun sittingGraphWithMe(strings: Sequence<String>): StringGraph {
+    val builder = StringGraphBuilder()
     for (string in strings) {
         val cond = TableParser.parse(string)
         val currentWeightDirect = builder.getEdge(cond.first, cond.second)?.weight ?: 0
