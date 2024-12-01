@@ -4,9 +4,9 @@ import org.jparsec.Parsers
 import org.jparsec.Scanners
 import org.jparsec.Terminals
 import org.jparsec.pattern.CharPredicates
-import ski.gagar.aoc.util.StringEdge
-import ski.gagar.aoc.util.StringGraph
-import ski.gagar.aoc.util.StringGraphBuilder
+import ski.gagar.aoc.util.graphs.StringEdge
+import ski.gagar.aoc.util.graphs.StringGraph
+import ski.gagar.aoc.util.graphs.StringGraphBuilder
 
 
 data class NextPath(

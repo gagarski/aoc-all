@@ -1,8 +1,8 @@
 package ski.gagar.aoc2015.day9.part1
 
-import ski.gagar.aoc.util.StringEdge
-import ski.gagar.aoc.util.StringGraph
-import ski.gagar.aoc.util.StringGraphBuilder
+import ski.gagar.aoc.util.graphs.StringEdge
+import ski.gagar.aoc.util.graphs.StringGraph
+import ski.gagar.aoc.util.graphs.StringGraphBuilder
 
 
 data class NextPath(

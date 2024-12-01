@@ -1,7 +1,7 @@
 package ski.gagar.aoc2023.day23.part2
 
-import ski.gagar.aoc.util.Graph
-import ski.gagar.aoc.util.GraphBuilder
+import ski.gagar.aoc.util.graphs.Graph
+import ski.gagar.aoc.util.graphs.GraphBuilder
 import ski.gagar.aoc2023.day23.part1.Coordinates
 import ski.gagar.aoc2023.day23.part1.Direction
 

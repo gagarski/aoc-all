@@ -7,8 +7,8 @@ import kotlinx.collections.immutable.persistentSetOf
 import org.jparsec.Parsers
 import org.jparsec.Scanners
 import org.jparsec.Terminals
-import ski.gagar.aoc.util.StringGraph
-import ski.gagar.aoc.util.StringGraphBuilder
+import ski.gagar.aoc.util.graphs.StringGraph
+import ski.gagar.aoc.util.graphs.StringGraphBuilder
 import java.util.*
 
 data class VolcanoNode(val name: String, val flowRate: Int, val neighbors: List<String>)

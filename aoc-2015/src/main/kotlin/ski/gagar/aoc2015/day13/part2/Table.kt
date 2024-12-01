@@ -1,7 +1,7 @@
 package ski.gagar.aoc2015.day13.part2
 
-import ski.gagar.aoc.util.StringGraph
-import ski.gagar.aoc.util.StringGraphBuilder
+import ski.gagar.aoc.util.graphs.StringGraph
+import ski.gagar.aoc.util.graphs.StringGraphBuilder
 import ski.gagar.aoc2015.day13.part1.TableParser
 import ski.gagar.aoc2015.day13.part1.findLongestPath
 import ski.gagar.aoc2015.day13.part1.pathLength
