@@ -1,4 +1,4 @@
-package ski.gagar.aoc.util
+package ski.gagar.aoc.util.graphs
 
 typealias StringEdge = Edge<String>
 

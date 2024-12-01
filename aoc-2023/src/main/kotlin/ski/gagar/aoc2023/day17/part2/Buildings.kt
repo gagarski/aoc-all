@@ -1,7 +1,7 @@
 package ski.gagar.aoc2023.day17.part2
 
-import ski.gagar.aoc.util.Edge
-import ski.gagar.aoc.util.GraphBuilder
+import ski.gagar.aoc.util.graphs.Edge
+import ski.gagar.aoc.util.graphs.GraphBuilder
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 

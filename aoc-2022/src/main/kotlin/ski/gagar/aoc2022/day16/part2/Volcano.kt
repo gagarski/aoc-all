@@ -4,8 +4,8 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import ski.gagar.aoc.util.StringGraph
-import ski.gagar.aoc.util.StringGraphBuilder
+import ski.gagar.aoc.util.graphs.StringGraph
+import ski.gagar.aoc.util.graphs.StringGraphBuilder
 import ski.gagar.aoc2022.day16.part1.Move
 import ski.gagar.aoc2022.day16.part1.OpenCurrentValve
 import ski.gagar.aoc2022.day16.part1.ShortestPath

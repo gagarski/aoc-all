@@ -1,4 +1,4 @@
-package ski.gagar.aoc.util
+package ski.gagar.aoc.util.graphs
 
 import java.util.*
 import kotlin.Comparator
@@ -285,10 +285,53 @@ class Graph<V>(
         }?.toList()
     }
 
+    private data class BiPartQueueItem<V>(val vertex: V, val isOdd: Boolean = false)
+
+    fun bipart(): Parts<V>? {
+        val first: V = vertices.first() ?: return null
+
+        val odd = mutableSetOf<V>()
+        val even = mutableSetOf<V>()
+
+        val queue = ArrayDeque<BiPartQueueItem<V>>()
+        queue.add(BiPartQueueItem(first))
+
+        while(queue.isNotEmpty()) {
+            val (v, isOdd) = queue.removeFirst()
+            when {
+                v in odd && !isOdd -> return null
+                v in even && isOdd -> return null
+                v in odd || v in even -> continue
+                isOdd -> odd.add(v)
+                else -> even.add(v)
+            }
+
+            for ((neighbor, _) in getEdgesFrom(v)) {
+                queue.add(BiPartQueueItem(neighbor, !isOdd))
+            }
+        }
+
+        if (odd.size + even.size != vertices.size)
+            return null
+
+        return Parts(odd, even)
+    }
+//
+//    fun segments(): List<Set<V>> {
+//
+//    }
+
+    fun copy(): GraphBuilder<V> =
+        GraphBuilder(vertices.toMutableSet(),
+            edges.mapValues { (k, v) -> v.toMutableMap() }.toMutableMap()
+        )
+
     private data class DfsOrders<V>(val pre: List<V>, val post: List<V>) {
         operator fun plus(other: DfsOrders<V>) =
             DfsOrders(pre + other.pre, post + other.post)
     }
+
+    data class Parts<V>(val odd: Set<V>, val even: Set<V>)
 
 }
 
@@ -299,9 +342,11 @@ data class ShortestPaths<V>(
     fun to(node: V) = paths[node]
 }
 
-class GraphBuilder<V> {
-    private val vertices_: MutableSet<V> = mutableSetOf()
-    private val edges_: MutableMap<V, MutableMap<V, Edge<V>>> = mutableMapOf()
+class GraphBuilder<V> internal constructor(vs: MutableSet<V>, es: MutableMap<V, MutableMap<V, Edge<V>>>) {
+
+    constructor() : this(mutableSetOf(), mutableMapOf())
+    private val vertices_: MutableSet<V> = vs
+    private val edges_: MutableMap<V, MutableMap<V, Edge<V>>> = es
     var built: Boolean = false
         private set
 
@@ -316,6 +361,12 @@ class GraphBuilder<V> {
         vertices_.add(name)
     }
 
+    fun removeVertex(name: V) {
+        require(!built)
+        edges_.remove(name)
+        vertices_.remove(name)
+    }
+
     fun addEdge(from: V, to: V, weight: Int = 1): Edge<V> {
         require(!built)
         require(from in vertices_)
@@ -327,11 +378,24 @@ class GraphBuilder<V> {
         return newEdge
     }
 
+    fun removeEdge(from: V, to: V) {
+        require(!built)
+        val srcEdges = edges_[from] ?: mutableMapOf()
+        srcEdges.remove(to)
+        if (srcEdges.isEmpty())
+            edges_.remove(from)
+    }
+
     fun addNonDirectedEdge(first: V, second: V, weight: Int = 1): Pair<Edge<V>, Edge<V>> {
         require(!built)
         val edge1 = addEdge(first, second, weight)
         val edge2 = addEdge(second, first, weight)
         return edge1 to edge2
+    }
+
+    fun removeNonDirectedEdge(first: V, second: V) {
+        removeEdge(first, second)
+        removeEdge(second, first)
     }
 
     fun getEdgesFrom(from: V) = edges_[from] ?: mapOf()
@@ -341,4 +405,28 @@ class GraphBuilder<V> {
         require(!built)
         return Graph(vertices_, edges_)
     }
+}
+
+fun main() {
+    val bld = GraphBuilder<String>()
+    bld.addVertex("a")
+    bld.addVertex("b")
+    bld.addNonDirectedEdge("a", "b")
+    bld.addVertex("c")
+    bld.addNonDirectedEdge("a", "c")
+    bld.addVertex("d")
+    bld.addNonDirectedEdge("b", "d")
+    bld.addNonDirectedEdge("c", "d")
+    bld.addVertex("e")
+    bld.addNonDirectedEdge("d", "e")
+    bld.addVertex("f")
+    bld.addNonDirectedEdge("e", "f")
+    bld.addVertex("g")
+    bld.addNonDirectedEdge("e", "g")
+    bld.addVertex("h")
+    bld.addNonDirectedEdge("e", "h")
+    bld.addVertex("i")
+    bld.addNonDirectedEdge("h", "i")
+
+    println(bld.build().bipart())
 }

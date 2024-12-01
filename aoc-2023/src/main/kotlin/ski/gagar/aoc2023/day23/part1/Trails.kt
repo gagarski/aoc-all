@@ -1,7 +1,7 @@
 package ski.gagar.aoc2023.day23.part1
 
-import ski.gagar.aoc.util.Graph
-import ski.gagar.aoc.util.GraphBuilder
+import ski.gagar.aoc.util.graphs.Graph
+import ski.gagar.aoc.util.graphs.GraphBuilder
 import kotlin.math.absoluteValue
 
 data class Coordinates(val x: Int, val y: Int) {

@@ -2,7 +2,6 @@ package ski.gagar.aoc2015.day21.part1
 
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentSetOf
-import ski.gagar.aoc.util.getResourceAsStream
 
 const val DEFAULT_PLAYER_HIT_POINTS = 100
 val DEFAULT_SUPPLY = listOf(
