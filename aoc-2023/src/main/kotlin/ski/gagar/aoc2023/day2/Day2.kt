@@ -9,6 +9,11 @@ object Day2 : Puzzle {
     override val name: String = "Cube Conundrum"
     override val inputPath: String = "/ski.gagar.aoc.aoc2023.day2/cubes.txt"
 
-    override fun part1(input: InputStream) = sumIdsIfIsPossible(input.bufferedReader().lineSequence())
-    override fun part2(input: InputStream) = sumPowers(input.bufferedReader().lineSequence())
+    override fun part1(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            sumIdsIfIsPossible(lines)
+        }
+    override fun part2(input: InputStream) = input.bufferedReader().useLines { lines ->
+        sumPowers(lines)
+    }
 }

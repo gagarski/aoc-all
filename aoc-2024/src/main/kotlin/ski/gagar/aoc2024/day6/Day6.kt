@@ -9,6 +9,12 @@ object Day6 : Puzzle {
     override val name = "Guard Gallivant"
     override val inputPath = "/ski.gagar.aoc.aoc2024.day6/field.txt"
 
-    override fun part1(input: InputStream)= nVisitedCells(input.bufferedReader().lineSequence())
-    override fun part2(input: InputStream)= nLoopGens(input.bufferedReader().lineSequence())
+    override fun part1(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            nVisitedCells(lines)
+        }
+    override fun part2(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            nLoopGens(lines)
+        }
 }

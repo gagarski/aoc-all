@@ -10,8 +10,12 @@ object Day13 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2015.day13/table.txt"
 
     override fun part1(input: InputStream) =
-        optimalHappiness(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            optimalHappiness(lines)
+        }
 
     override fun part2(input: InputStream) =
-        optimalHappinessWithMe(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            optimalHappinessWithMe(lines)
+        }
 }

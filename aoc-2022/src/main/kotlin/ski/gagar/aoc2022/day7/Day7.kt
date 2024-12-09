@@ -9,7 +9,13 @@ object Day7 : Puzzle {
     override val name: String = "No Space Left On Device"
     override val inputPath: String = "/ski.gagar.aoc.aoc2022.day7/console.txt"
 
-    override fun part1(input: InputStream) = getSumOfDirsLessThan(input.bufferedReader().lineSequence())
+    override fun part1(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            getSumOfDirsLessThan(lines)
+        }
 
-    override fun part2(input: InputStream) = freeUp(input.bufferedReader().lineSequence())
+    override fun part2(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            freeUp(lines)
+        }
 }

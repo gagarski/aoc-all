@@ -10,9 +10,12 @@ object Day9 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2015.day9/travel.txt"
 
     override fun part1(input: InputStream) =
-        shortestPath(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            shortestPath(lines)
+        }
 
     override fun part2(input: InputStream) =
-        longestPath(input.bufferedReader().lineSequence())
-
+        input.bufferedReader().useLines { lines ->
+            longestPath(lines)
+        }
 }

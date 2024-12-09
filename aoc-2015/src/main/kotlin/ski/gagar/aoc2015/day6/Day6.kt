@@ -10,8 +10,12 @@ object Day6 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2015.day6/bulbs.txt"
 
     override fun part1(input: InputStream) =
-        nBulbs(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            nBulbs(lines)
+        }
 
     override fun part2(input: InputStream) =
-        totalBrightness(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            totalBrightness(lines)
+        }
 }

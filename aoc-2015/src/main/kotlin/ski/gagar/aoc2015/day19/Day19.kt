@@ -10,8 +10,12 @@ object Day19 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2015.day19/chemistry.txt"
 
     override fun part1(input: InputStream) =
-        countReplacement(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            countReplacement(lines)
+        }
 
     override fun part2(input: InputStream) =
-        countSteps(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            countSteps(lines)
+        }
 }

@@ -62,16 +62,9 @@ fun biPartCount(lines: Sequence<String>, targetSize: Int = 3): Int {
         val parts = graph.minCutKarger()
 
         if (parts.connectingEdges.size == targetSize * 2) {
-            println(parts)
             cut = parts
             break
         }
     }
     return cut.first.size * cut.second.size
-}
-
-fun main() {
-    for (c in listOf("a", "b", "c").combos(2)) {
-        println(c)
-    }
 }

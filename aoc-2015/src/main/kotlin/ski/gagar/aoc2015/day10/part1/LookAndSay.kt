@@ -1,8 +1,5 @@
 package ski.gagar.aoc2015.day10.part1
 
-import ski.gagar.aoc.util.getResourceAsStream
-import ski.gagar.aoc2015.day9.part2.longestPath
-
 fun lookAndSay(string: String): String {
     var last: Char? = null
     var repeatCtr = 1
@@ -27,7 +24,7 @@ fun lookAndSay(string: String): String {
     }
 }
 
-fun lookAnsSayLength(string: String, iterations: Int = 40): Int {
+fun lookAndSayLength(string: String, iterations: Int = 40): Int {
     var current = string
 
     for (i in 0 until iterations) {

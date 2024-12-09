@@ -8,6 +8,12 @@ import java.io.InputStream
 object Day22 : Puzzle {
     override val name: String = "A Long Walk"
     override val inputPath: String = "/ski.gagar.aoc.aoc2023.day22/bricks.txt"
-    override fun part1(input: InputStream) = nDisintegratable(input.bufferedReader().lineSequence())
-    override fun part2(input: InputStream) = sumFallen(input.bufferedReader().lineSequence())
+    override fun part1(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            nDisintegratable(lines)
+        }
+    override fun part2(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            sumFallen(lines)
+        }
 }

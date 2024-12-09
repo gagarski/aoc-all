@@ -10,9 +10,12 @@ object Day14 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2023.day14/rocks.txt"
 
     override fun part1(input: InputStream) =
-        loadAfterTilt(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            loadAfterTilt(lines)
+        }
 
     override fun part2(input: InputStream) =
-        loadAfterSpin(input.bufferedReader().lineSequence())
-
+        input.bufferedReader().useLines { lines ->
+            loadAfterSpin(lines)
+        }
 }

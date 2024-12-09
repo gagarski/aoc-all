@@ -10,8 +10,12 @@ object Day7 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2015.day7/circuits.txt"
 
     override fun part1(input: InputStream) =
-        makeCircuitAndEvaluate(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            makeCircuitAndEvaluate(lines)
+        }
 
     override fun part2(input: InputStream) =
-        makeCircuitAndEvaluateThenReassign(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            makeCircuitAndEvaluateThenReassign(lines)
+        }
 }

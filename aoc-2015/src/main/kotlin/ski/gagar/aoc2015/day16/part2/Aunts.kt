@@ -23,5 +23,19 @@ fun findFirstMatching(aunt: UnknownAunt, descs: Sequence<AuntDescription>) =
     descs.find { aunt.matches2(it) }
 
 
-fun findFirstMatching(auntStrings: Sequence<String>, descs: Sequence<String>) =
-    findFirstMatching(AuntParser.parseUnknownAunt(auntStrings), descs.map { AuntParser.parseDescription(it) })?.index
+fun findFirstMatching(descs: Sequence<String>,
+                      unknownAunt: UnknownAunt = UnknownAunt(
+                          mapOf(
+                              AuntCharacteristic.CHILDREN to 3,
+                              AuntCharacteristic.CATS to 7,
+                              AuntCharacteristic.SAMOYEDS to 2,
+                              AuntCharacteristic.POMERANIANS to 3,
+                              AuntCharacteristic.AKITAS to 0,
+                              AuntCharacteristic.VIZSLAS to 0,
+                              AuntCharacteristic.GOLDFISH to 5,
+                              AuntCharacteristic.TREES to 3,
+                              AuntCharacteristic.CARS to 2,
+                              AuntCharacteristic.PERFUMES to 1
+                          )
+                      )) =
+    findFirstMatching(unknownAunt, descs.map { AuntParser.parseDescription(it) })?.index

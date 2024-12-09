@@ -10,8 +10,12 @@ object Day11 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2023.day11/galaxies.txt"
 
     override fun part1(input: InputStream) =
-        sumManhattan(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            sumManhattan(lines)
+        }
 
     override fun part2(input: InputStream) =
-        sumManhattan(input.bufferedReader().lineSequence(), EXPANSION_PART_2, EXPANSION_PART_2)
+        input.bufferedReader().useLines { lines ->
+            sumManhattan(lines, EXPANSION_PART_2, EXPANSION_PART_2)
+        }
 }

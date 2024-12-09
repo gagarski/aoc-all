@@ -8,8 +8,12 @@ object Day5 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2015.day5/nice.txt"
 
     override fun part1(input: InputStream) =
-        ski.gagar.aoc2015.day5.part1.countNice(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            ski.gagar.aoc2015.day5.part1.countNice(lines)
+        }
 
     override fun part2(input: InputStream) =
-        ski.gagar.aoc2015.day5.part2.countNice(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            ski.gagar.aoc2015.day5.part2.countNice(lines)
+        }
 }

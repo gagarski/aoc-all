@@ -8,8 +8,12 @@ object Day17 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2023.day17/buildings.txt"
 
     override fun part1(input: InputStream) =
-        ski.gagar.aoc2023.day17.part1.minHeatLoss(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            ski.gagar.aoc2023.day17.part1.minHeatLoss(lines)
+        }
 
     override fun part2(input: InputStream) =
-        ski.gagar.aoc2023.day17.part2.minHeatLoss(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            ski.gagar.aoc2023.day17.part2.minHeatLoss(lines)
+        }
 }
