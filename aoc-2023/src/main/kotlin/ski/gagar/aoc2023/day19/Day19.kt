@@ -8,7 +8,6 @@ import java.io.InputStream
 
 object Day19 : Puzzle {
     override val name: String = "Aplenty"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2023.day19/pipelines.txt"
 
     override fun part1(input: InputStream) = sumTraits(input.bufferedReader().readTextAndClose())
     override fun part2(input: InputStream) = nCombos(input.bufferedReader().readTextAndClose())

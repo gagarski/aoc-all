@@ -6,7 +6,6 @@ import java.io.InputStream
 
 object Day17 : Puzzle {
     override val name: String = "Pyroclastic Flow"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2022.day17/tetris.txt"
 
     override fun part1(input: InputStream) =
         ski.gagar.aoc2022.day17.part1.getMaxHeight(input.bufferedReader().readTextAndClose())

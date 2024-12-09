@@ -7,7 +7,6 @@ import java.io.InputStream
 const val EXPANSION_PART_2 = 1000000L
 object Day11 : Puzzle {
     override val name: String = "Cosmic Expansion"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2023.day11/galaxies.txt"
 
     override fun part1(input: InputStream) =
         input.bufferedReader().useLines { lines ->

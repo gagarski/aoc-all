@@ -5,7 +5,6 @@ import java.io.InputStream
 
 object Day15 : Puzzle {
     override val name: String = "Science for Hungry People"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2015.day15/cookies.txt"
 
     override fun part1(input: InputStream) =
         input.bufferedReader().useLines { lines ->

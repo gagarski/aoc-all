@@ -7,7 +7,6 @@ import java.io.InputStream
 
 object Day9 : Puzzle {
     override val name: String = "Disk Fragmenter"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2024.day9/fs.txt"
 
     override fun part1(input: InputStream) =
         input.buffered().use { bis ->

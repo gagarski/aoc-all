@@ -27,6 +27,7 @@ import ski.gagar.aoc2023.day6.Day6
 import ski.gagar.aoc2023.day7.Day7
 import ski.gagar.aoc2023.day8.Day8
 import ski.gagar.aoc2023.day9.Day9
+import kotlin.io.path.Path
 
 object Aoc2023 : Contest {
     override val puzzles: List<Puzzle> =
@@ -59,6 +60,9 @@ object Aoc2023 : Contest {
         )
 }
 
-fun main() {
-    Aoc2023.run()
+fun main(args: Array<String>) {
+    require(args.size == 1) {
+        "This app requires exactly one arg (base input folder)"
+    }
+    Aoc2023.run(Path(args[0]))
 }

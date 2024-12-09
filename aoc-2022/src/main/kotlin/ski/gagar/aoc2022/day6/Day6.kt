@@ -9,7 +9,6 @@ private const val N_DIFFERENT_PART_2 = 14
 
 object Day6 : Puzzle {
     override val name: String = "Tuning Trouble"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2022.day6/messages.txt"
 
     override fun part1(input: InputStream) = startOffset(input.bufferedReader().readTextAndClose())
 

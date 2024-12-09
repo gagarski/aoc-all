@@ -10,6 +10,7 @@ import ski.gagar.aoc2024.day6.Day6
 import ski.gagar.aoc2024.day7.Day7
 import ski.gagar.aoc2024.day8.Day8
 import ski.gagar.aoc2024.day9.Day9
+import kotlin.io.path.Path
 
 object Aoc2024 : Contest {
     override val puzzles = listOf(
@@ -25,6 +26,9 @@ object Aoc2024 : Contest {
     )
 }
 
-fun main() {
-    Aoc2024.run()
+fun main(args: Array<String>) {
+    require(args.size == 1) {
+        "This app requires exactly one arg (base input folder)"
+    }
+    Aoc2024.run(Path(args[0]))
 }
