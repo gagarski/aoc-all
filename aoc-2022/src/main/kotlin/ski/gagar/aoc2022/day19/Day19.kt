@@ -9,7 +9,6 @@ import ski.gagar.aoc2022.day19.part2.quality as qualityPart2
 
 object Day19 : Puzzle {
     override val name: String = "Not Enough Minerals"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2022.day19/robots.txt"
 
     override fun part1(input: InputStream) =
         RobotsParser.parse(

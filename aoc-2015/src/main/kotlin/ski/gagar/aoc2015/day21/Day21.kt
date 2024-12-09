@@ -8,7 +8,6 @@ import java.io.InputStream
 
 object Day21 : Puzzle {
     override val name: String = "RPG Simulator 20XX"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2015.day21/boss.txt"
 
     override fun part1(input: InputStream) = findMinWinCost(input.bufferedReader().readTextAndClose())
 

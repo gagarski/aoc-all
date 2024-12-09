@@ -1,13 +1,11 @@
 package ski.gagar.aoc2015.day18
 
 import ski.gagar.aoc.util.Puzzle
-import ski.gagar.aoc.util.getResourceAsStream
 import ski.gagar.aoc2015.day18.part2.defaultNextState
 import java.io.InputStream
 
 object Day18 : Puzzle {
     override val name: String = "Like a GIF For Your Yard"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2015.day18/life.txt"
 
     override fun part1(input: InputStream) =
         input.bufferedReader().useLines { lines ->

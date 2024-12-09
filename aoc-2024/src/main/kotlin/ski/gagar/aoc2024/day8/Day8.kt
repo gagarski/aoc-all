@@ -5,7 +5,6 @@ import java.io.InputStream
 
 object Day8 : Puzzle {
     override val name: String = "Resonant Collinearity"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2024.day8/antennas.txt"
 
     override fun part1(input: InputStream) =
         input.bufferedReader().useLines { lines ->

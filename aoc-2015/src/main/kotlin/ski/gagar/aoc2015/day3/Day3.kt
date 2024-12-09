@@ -6,7 +6,6 @@ import java.io.InputStream
 
 object Day3 : Puzzle {
     override val name: String= "Perfectly Spherical Houses in a Vacuum"
-    override val inputPath: String = "/ski.gagar.aoc.aoc2015.day3/gifts.txt"
 
     override fun part1(input: InputStream) =
         ski.gagar.aoc2015.day3.part1.drive(

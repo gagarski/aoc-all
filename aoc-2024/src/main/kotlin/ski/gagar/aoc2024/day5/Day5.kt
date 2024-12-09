@@ -7,7 +7,6 @@ import java.io.InputStream
 
 object Day5 : Puzzle {
     override val name = "Print Queue"
-    override val inputPath = "/ski.gagar.aoc.aoc2024.day5/pages.txt"
 
     override fun part1(input: InputStream): Int =
         input.bufferedReader().useLines { lines ->
