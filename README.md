@@ -5,7 +5,7 @@
 # How to run
 ```
 $ mvn clean package
-$ java -jar /path/to/your/inputs/folder
+$ java -jar aoc-2024/target/aoc-2024-1.0-SNAPSHOT.jar /path/to/your/inputs/folder
 ```
 
 # Input folder structure
