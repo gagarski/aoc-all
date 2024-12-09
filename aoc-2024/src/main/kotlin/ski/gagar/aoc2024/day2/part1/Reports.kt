@@ -9,16 +9,16 @@ fun sign(int: Int) =
         else -> 1
     }
 
-fun isSafe(level: List<Int>, maxDiff: Int = 3): Boolean {
-    if (level.size <= 1) return true
-    val sign = sign(level[1] - level[0])
+fun isSafe(report: List<Int>, maxDiff: Int = 3): Boolean {
+    if (report.size <= 1) return true
+    val sign = sign(report[1] - report[0])
 
-    for (i in 0 until level.size - 1) {
-        val currentSign = sign(level[i + 1] - level[i])
+    for (i in 0 until report.size - 1) {
+        val currentSign = sign(report[i + 1] - report[i])
         if (currentSign != sign)
             return false
 
-        val diff = abs(level[i + 1] - level[i])
+        val diff = abs(report[i + 1] - report[i])
         if (diff > maxDiff)
             return false
     }
@@ -28,8 +28,8 @@ fun isSafe(level: List<Int>, maxDiff: Int = 3): Boolean {
 
 fun parseReport(string: String): List<Int> = string.split("""\s+""".toRegex()).map { it.toInt() }
 
-fun countSafe(levels: Sequence<List<Int>>, maxDiff: Int = 3): Int =
-    levels.count { isSafe(it, maxDiff) }
+fun countSafe(reports: Sequence<List<Int>>, maxDiff: Int = 3): Int =
+    reports.count { isSafe(it, maxDiff) }
 
-fun countSafeStrings(levels: Sequence<String>, maxDiff: Int = 3) =
-    countSafe(levels.map { parseReport(it) }, maxDiff)
+fun countSafeStrings(reports: Sequence<String>, maxDiff: Int = 3) =
+    countSafe(reports.map { parseReport(it) }, maxDiff)
