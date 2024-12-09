@@ -11,7 +11,11 @@ object Day2 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2015.day2/paper.txt"
 
     override fun part1(input: InputStream) =
-        getTotalArea(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            getTotalArea(lines)
+        }
     override fun part2(input: InputStream) =
-        getTotalRibbonLength(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            getTotalRibbonLength(lines)
+        }
 }

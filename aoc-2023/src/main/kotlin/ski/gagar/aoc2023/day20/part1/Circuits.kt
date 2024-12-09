@@ -93,7 +93,6 @@ class Circuit(wirings: Set<Wiring>) {
                 GateType.CONJUNCTOR -> Conjunctor(it.name, inputs[it.name] ?: setOf())
             }
         }.associateBy { it.name }
-        println("OOO")
     }
 
     fun simulate(initPulse: Pulse = Pulse()): PulseCounter {

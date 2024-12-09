@@ -1,6 +1,7 @@
 package ski.gagar.aoc2022.day19
 
 import ski.gagar.aoc.util.Puzzle
+import ski.gagar.aoc.util.readTextAndClose
 import ski.gagar.aoc2022.day19.part1.RobotsParser
 import java.io.InputStream
 import ski.gagar.aoc2022.day19.part1.quality as qualityPart1
@@ -12,11 +13,11 @@ object Day19 : Puzzle {
 
     override fun part1(input: InputStream) =
         RobotsParser.parse(
-            input.bufferedReader().readText()
+            input.bufferedReader().readTextAndClose()
         ).qualityPart1()
 
     override fun part2(input: InputStream) =
         RobotsParser.parse(
-            input.bufferedReader().readText()
+            input.bufferedReader().readTextAndClose()
         ).qualityPart2()
 }

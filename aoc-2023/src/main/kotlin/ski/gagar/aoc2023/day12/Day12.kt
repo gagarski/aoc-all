@@ -9,6 +9,12 @@ object Day12 : Puzzle {
     override val name: String = "Hot Springs"
     override val inputPath: String = "/ski.gagar.aoc.aoc2023.day12/springs.txt"
 
-    override fun part1(input: InputStream) = sumPatternCount(input.bufferedReader().lineSequence())
-    override fun part2(input: InputStream) = sumPatternCountFolded(input.bufferedReader().lineSequence())
+    override fun part1(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            sumPatternCount(lines)
+        }
+    override fun part2(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            sumPatternCountFolded(lines)
+        }
 }

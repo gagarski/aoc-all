@@ -8,8 +8,12 @@ object Day1 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2023.day1/calibration.txt"
 
     override fun part1(input: InputStream) =
-        ski.gagar.aoc2023.day1.part1.calibration(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            ski.gagar.aoc2023.day1.part1.calibration(lines)
+        }
 
     override fun part2(input: InputStream) =
-        ski.gagar.aoc2023.day1.part2.calibration(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            ski.gagar.aoc2023.day1.part2.calibration(lines)
+        }
 }

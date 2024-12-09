@@ -11,6 +11,12 @@ object Day4 : Puzzle {
     override val name = "Ceres Search"
     override val inputPath = "/ski.gagar.aoc.aoc2024.day4/xmas.txt"
 
-    override fun part1(input: InputStream): Int = countXmas(input.bufferedReader().lineSequence())
-    override fun part2(input: InputStream): Int = countXMas(input.bufferedReader().lineSequence())
+    override fun part1(input: InputStream): Int =
+        input.bufferedReader().useLines { lines ->
+            countXmas(lines)
+        }
+    override fun part2(input: InputStream): Int =
+        input.bufferedReader().useLines { lines ->
+            countXMas(lines)
+        }
 }

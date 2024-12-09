@@ -1,6 +1,5 @@
 package ski.gagar.aoc2015.day18.part2
 
-import ski.gagar.aoc.util.getResourceAsStream
 import java.util.*
 
 fun defaultNextState(state: CellWithNeighbors): Boolean {

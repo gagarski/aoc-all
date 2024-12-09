@@ -10,8 +10,12 @@ object Day23 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2022.day23/plants.txt"
 
     override fun part1(input: InputStream) =
-        getNPlants(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            getNPlants(lines)
+        }
 
     override fun part2(input: InputStream) =
-        getNSteps(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            getNSteps(lines)
+        }
 }

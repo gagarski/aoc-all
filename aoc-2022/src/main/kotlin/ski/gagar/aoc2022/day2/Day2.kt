@@ -8,8 +8,12 @@ object Day2 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2022.day2/rps.txt"
 
     override fun part1(input: InputStream) =
-        ski.gagar.aoc2022.day2.part1.playAllRounds(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            ski.gagar.aoc2022.day2.part1.playAllRounds(lines)
+        }
 
     override fun part2(input: InputStream) =
-        ski.gagar.aoc2022.day2.part2.playAllRounds(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            ski.gagar.aoc2022.day2.part2.playAllRounds(lines)
+        }
 }

@@ -10,7 +10,10 @@ object Day25 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2022.day25/snafu.txt"
 
     override fun part1(input: InputStream) =
-        genSnafuSum(
-            input.bufferedReader().lineSequence()
-        )
+        input.bufferedReader().useLines { lines ->
+            genSnafuSum(
+                lines
+            )
+        }
+
 }

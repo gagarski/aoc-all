@@ -8,8 +8,12 @@ object Day14 : Puzzle {
     override val inputPath: String = "/ski.gagar.aoc.aoc2022.day14/cave.txt"
 
     override fun part1(input: InputStream) =
-        ski.gagar.aoc2022.day14.part1.simulate(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            ski.gagar.aoc2022.day14.part1.simulate(lines)
+        }
 
     override fun part2(input: InputStream) =
-        ski.gagar.aoc2022.day14.part2.simulate(input.bufferedReader().lineSequence())
+        input.bufferedReader().useLines { lines ->
+            ski.gagar.aoc2022.day14.part2.simulate(lines)
+        }
 }

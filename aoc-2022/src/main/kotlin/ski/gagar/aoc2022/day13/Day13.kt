@@ -9,7 +9,13 @@ object Day13 : Puzzle {
     override val name: String = "Distress Signal"
     override val inputPath: String = "/ski.gagar.aoc.aoc2022.day13/signals.txt"
 
-    override fun part1(input: InputStream) = getSumOfIndices(input.bufferedReader().lineSequence())
+    override fun part1(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            getSumOfIndices(lines)
+        }
 
-    override fun part2(input: InputStream) = getIndicesOfDivider(input.bufferedReader().lineSequence())
+    override fun part2(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            getIndicesOfDivider(lines)
+        }
 }

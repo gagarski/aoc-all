@@ -1,7 +1,5 @@
 package ski.gagar.aoc2015.day11.part1
 
-import ski.gagar.aoc.util.getResourceAsStream
-import ski.gagar.aoc2015.day10.part1.lookAnsSayLength
 import java.lang.AssertionError
 import java.math.BigInteger
 
@@ -18,7 +16,9 @@ private fun String.toBigIntLetters(range: CharRange = CHAR_RANGE): BigInteger {
     require(range.size <= 26)
     val canonical = buildString {
         for (letter in this@toBigIntLetters) {
-            require(letter in range)
+            require(letter in range) {
+                "FFFF"
+            }
             val digit = letter - 'a'
             append(
                 when (digit) {

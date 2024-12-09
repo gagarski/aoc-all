@@ -9,7 +9,13 @@ object Day4 : Puzzle {
     override val name: String = "Camp Cleanup"
     override val inputPath: String = "/ski.gagar.aoc.aoc2022.day4/compartments.txt"
 
-    override fun part1(input: InputStream) = countFullyIntersecting(input.bufferedReader().lineSequence())
+    override fun part1(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            countFullyIntersecting(lines)
+        }
 
-    override fun part2(input: InputStream) = countIntersecting(input.bufferedReader().lineSequence())
+    override fun part2(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            countIntersecting(lines)
+        }
 }

@@ -9,7 +9,13 @@ object Day3 : Puzzle {
     override val name: String = "Gear Ratios"
     override val inputPath: String = "/ski.gagar.aoc.aoc2023.day3/board.txt"
 
-    override fun part1(input: InputStream) = partNumbers(input.bufferedReader().lineSequence())
+    override fun part1(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            partNumbers(lines)
+        }
 
-    override fun part2(input: InputStream) = gearRatio(input.bufferedReader().lineSequence())
+    override fun part2(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            gearRatio(lines)
+        }
 }

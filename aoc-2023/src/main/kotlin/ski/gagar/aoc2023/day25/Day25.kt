@@ -8,5 +8,8 @@ object Day25 : Puzzle {
     override val name: String = "Snowverload"
     override val inputPath: String = "/ski.gagar.aoc.aoc2023.day25/wires.txt"
 
-    override fun part1(input: InputStream) = biPartCount(input.bufferedReader().lineSequence())
+    override fun part1(input: InputStream) =
+        input.bufferedReader().useLines { lines ->
+            biPartCount(lines)
+        }
 }

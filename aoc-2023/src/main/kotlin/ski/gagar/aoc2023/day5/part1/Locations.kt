@@ -24,7 +24,7 @@ class Mapping(items: Sequence<MappingItem>) {
         }
     }
 
-    operator fun get(src: Long): Long = map.floorEntry(src)?.value[src]
+    operator fun get(src: Long): Long = map.floorEntry(src)?.value.get(src)
 }
 
 val EMPTY = Mapping(emptySequence())
