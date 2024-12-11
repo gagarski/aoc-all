@@ -48,63 +48,34 @@ fun processStone(stone: BigInteger): Sequence<BigInteger> = sequence {
 
 
 class StonesEval {
-    private val cache: MutableMap<BigInteger, NavigableMap<Int, PersistentList<BigInteger>>> = mutableMapOf()
+    private val cache: MutableMap<Pair<BigInteger, Int>, BigInteger> = mutableMapOf()
 
-    fun advanceCache(stone: BigInteger, stones: List<BigInteger>, stepsToAdd: Int) {
-        val entry = cache[stone] ?: TreeMap()
-
-        outer@ for (i in 1 until MAX_DEPTH - stepsToAdd) {
-            var newStones = persistentListOf<BigInteger>()
-
-            for (otherStone in stones) {
-                val cached = cache[otherStone]?.get(i) ?: continue@outer
-                newStones = newStones.addAll(cached)
-            }
-            if (newStones.isEmpty()) {
-                continue
-            }
-            entry[stepsToAdd + i] = newStones
-        }
-        cache[stone] = entry
-
-    }
 
     private fun countStones(seed: BigInteger,
                             steps: Int): BigInteger {
         if (steps == 0) {
             return BigInteger.ONE
         }
-        val cacheEntry = cache[seed]?.floorEntry(steps)
-        if (cacheEntry != null) {
-            val remSteps = steps - cacheEntry.key
-            val stones = cacheEntry.value
-            var count = BigInteger.ZERO
 
+        val cached = cache[Pair(seed, steps)]
 
-            for (stone in stones) {
-                count += countStones(stone, remSteps)
-            }
-
-            advanceCache(seed, stones, cacheEntry.key)
-            if (steps > 40)
-                println("Ret from $steps")
-            return count
-        } else {
-            val stones = processStone(seed).toPersistentList()
-
-            val newItem = TreeMap<Int, PersistentList<BigInteger>>()
-            newItem[1] = stones
-            cache[seed] = newItem
-
-            var count = BigInteger.ZERO
-
-            for (stone in stones) {
-                count += countStones(stone, steps - 1)
-            }
-
-            advanceCache(seed, stones, 1)
-            return count
+        if (cached != null) {
+            return cached
         }
+
+        val stones = processStone(seed).toPersistentList()
+
+        val newItem = TreeMap<Int, PersistentList<BigInteger>>()
+        newItem[1] = stones
+
+        var count = BigInteger.ZERO
+
+        for (stone in stones) {
+            count += countStones(stone, steps - 1)
+        }
+
+        cache[Pair(seed, steps)] = count
+        return count
     }
 
     fun countStones(stones: List<BigInteger>, steps: Int = 75): BigInteger {
@@ -124,7 +95,5 @@ class StonesEval {
 fun countStones(string: String, n: Int = 75) =
     string.split(" ").map { it.toBigInteger() }.let {
         val eval = StonesEval()
-        eval.countStones(it, 35)
-        println("warmed up")
         eval.countStones(it, n)
     }
