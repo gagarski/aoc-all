@@ -55,23 +55,25 @@ fun List<Coordinates>.draw(field: Coordinates) = buildString {
 private val F_EX = Coordinates(column = 11.toBigInteger(), row = 7.toBigInteger())
 private val F_REAL = Coordinates(column = 101.toBigInteger(), row = 103.toBigInteger())
 
-fun restRoomRobotsDraw(input: String, steps: Int = 30000,
-                       field: Coordinates = F_REAL
-): String {
+fun findTreeCandidate(input: String,
+                      steps: Int = 30000,
+                      lineLength: Int = 10,
+                      field: Coordinates = F_REAL
+): Int {
     require(field.row % BigInteger.TWO == BigInteger.ONE)
     require(field.column % BigInteger.TWO == BigInteger.ONE)
     val robots = RobotsParser.parse(input)
     var endCoords = robots
-    val out = File("out/Aoc2024/Day14.txt")
-    out.parentFile.mkdirs()
-    out.printWriter().use { writer ->
-        for (step in 1 .. steps) {
-            endCoords = endCoords.map { it.runNaive(field) }
-            writer.println(step)
-            writer.println(endCoords.map { it.start }.draw(field))
+    val re = """[0-9]{$lineLength,}""".toRegex()
+    for (step in 1 .. steps) {
+        endCoords = endCoords.map { it.runNaive(field) }
+        val img = endCoords.map { it.start }.draw(field)
+
+        if (img.contains(re)) {
+            println(img)
+            return step
         }
     }
 
-
-    return "See $out"
+    return -1
 }
