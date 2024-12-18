@@ -42,6 +42,10 @@
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-collections-immutable-jvm</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jparsec</groupId>
+            <artifactId>jparsec</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

@@ -65,7 +65,11 @@ object RobotsParser {
         Robot(p, v)
     }
 
-    private val ROBOTS = ROBOT.sepBy(NEWLINE.many1())
+    private val ROBOTS = Parsers.sequence(
+        NEWLINE.many(),
+        ROBOT.sepBy(NEWLINE.many1()),
+        NEWLINE.many()
+    ) { _, r, _-> r }
 
     fun parse(input: String) = ROBOTS.from(TOKENIZER, WHITESPACES).parse(input)
 }
