@@ -18,6 +18,7 @@ import ski.gagar.aoc2024.day21.Day21
 import ski.gagar.aoc2024.day22.Day22
 import ski.gagar.aoc2024.day23.Day23
 import ski.gagar.aoc2024.day24.Day24
+import ski.gagar.aoc2024.day25.Day25
 import ski.gagar.aoc2024.day3.Day3
 import ski.gagar.aoc2024.day4.Day4
 import ski.gagar.aoc2024.day5.Day5
@@ -29,30 +30,31 @@ import kotlin.io.path.Path
 
 object Aoc2024 : Contest {
     override val puzzles = listOf(
-        Day1,
-        Day2,
-        Day3,
-        Day4,
-        Day5,
-        Day6,
-        Day7,
-        Day8,
-        Day9,
-        Day10,
-        Day11,
-        Day12,
-        Day13,
-        Day14,
-        Day15,
-        Day16,
-        Day17,
-        Day18,
-        Day19,
-        Day20,
-        Day21,
-        Day22,
-        Day23,
-        Day24
+//        Day1,
+//        Day2,
+//        Day3,
+//        Day4,
+//        Day5,
+//        Day6,
+//        Day7,
+//        Day8,
+//        Day9,
+//        Day10,
+//        Day11,
+//        Day12,
+//        Day13,
+//        Day14,
+//        Day15,
+//        Day16,
+//        Day17,
+//        Day18,
+//        Day19,
+//        Day20,
+//        Day21,
+//        Day22,
+//        Day23,
+//        Day24
+        Day25
     )
 }
 
