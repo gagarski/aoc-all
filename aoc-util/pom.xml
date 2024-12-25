@@ -46,6 +46,17 @@
             <groupId>org.jparsec</groupId>
             <artifactId>jparsec</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.mxgraph/mxgraph-all -->
+        <!-- https://mvnrepository.com/artifact/com.mxgraph/jgraphx -->
+        <!-- https://mvnrepository.com/artifact/com.github.vlsi.mxgraph/jgraphx -->
+        <dependency>
+            <groupId>com.github.vlsi.mxgraph</groupId>
+            <artifactId>jgraphx</artifactId>
+            <version>4.2.2</version>
+        </dependency>
+
+
+
     </dependencies>
 
 </project>
