@@ -7,7 +7,7 @@ import ski.gagar.aoc2024.day24.part2.getFaultyGates
 import java.io.InputStream
 
 object Day24 : Puzzle {
-    override val name: String = "Some Assembly Required"
+    override val name: String = "Crossed Wires"
     override fun part1(input: InputStream) = getNumberFromZ(input.bufferedReader().readTextAndClose())
     override fun part2(input: InputStream) = getFaultyGates(input.bufferedReader().readTextAndClose())
 }
