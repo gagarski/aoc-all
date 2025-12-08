@@ -316,10 +316,43 @@ class Graph<V>(
 
         return Parts(odd, even)
     }
-//
-//    fun segments(): List<Set<V>> {
-//
-//    }
+
+    fun segments(): Set<Set<V>> {
+        val visited = mutableSetOf<V>()
+        val segments = mutableSetOf<Set<V>>()
+        for (v in vertices) {
+            if (v in visited) continue
+            val segment = mutableSetOf<V>()
+            bfs(v) {
+                visited.add(it)
+                segment.add(it)
+            }
+            segments += segment
+        }
+        return segments
+    }
+
+    fun bfs(start: V, visitor: (V) -> Unit) {
+        val queue = ArrayDeque<V>()
+        val visited = mutableSetOf<V>()
+        require(start in vertices)
+
+        queue.addLast(start)
+
+        while (queue.isNotEmpty()) {
+            val item = queue.removeFirst()
+            if (item in visited) {
+                continue
+            }
+            visitor(item)
+            visited.add(item)
+            for ((n, _) in getEdgesFrom(item)) {
+                if (n !in visited) {
+                    queue.addLast(n)
+                }
+            }
+        }
+    }
 
     fun copy(): GraphBuilder<V> =
         GraphBuilder(vertices.toMutableSet(),
@@ -343,7 +376,6 @@ data class ShortestPaths<V>(
 }
 
 class GraphBuilder<V> internal constructor(vs: MutableSet<V>, es: MutableMap<V, MutableMap<V, Edge<V>>>) {
-
     constructor() : this(mutableSetOf(), mutableMapOf())
     private val vertices_: MutableSet<V> = vs
     private val edges_: MutableMap<V, MutableMap<V, Edge<V>>> = es
@@ -401,32 +433,35 @@ class GraphBuilder<V> internal constructor(vs: MutableSet<V>, es: MutableMap<V, 
     fun getEdgesFrom(from: V) = edges_[from] ?: mapOf()
     fun getEdge(from: V, to: V): Edge<V>? = getEdgesFrom(from)[to]
 
+    fun bfs(start: V, visitor: (V) -> Unit) {
+        val queue = ArrayDeque<V>()
+        val visited = mutableSetOf<V>()
+        require(start in vertices)
+
+        queue.addLast(start)
+
+        while (queue.isNotEmpty()) {
+            val item = queue.removeFirst()
+            if (item in visited) {
+                continue
+            }
+            visitor(item)
+            visited.add(item)
+            for ((n, _) in getEdgesFrom(item)) {
+                if (n !in visited) {
+                    queue.addLast(n)
+                }
+            }
+        }
+    }
+
+
     fun build(): Graph<V> {
         require(!built)
         return Graph(vertices_, edges_)
     }
-}
 
-fun main() {
-    val bld = GraphBuilder<String>()
-    bld.addVertex("a")
-    bld.addVertex("b")
-    bld.addNonDirectedEdge("a", "b")
-    bld.addVertex("c")
-    bld.addNonDirectedEdge("a", "c")
-    bld.addVertex("d")
-    bld.addNonDirectedEdge("b", "d")
-    bld.addNonDirectedEdge("c", "d")
-    bld.addVertex("e")
-    bld.addNonDirectedEdge("d", "e")
-    bld.addVertex("f")
-    bld.addNonDirectedEdge("e", "f")
-    bld.addVertex("g")
-    bld.addNonDirectedEdge("e", "g")
-    bld.addVertex("h")
-    bld.addNonDirectedEdge("e", "h")
-    bld.addVertex("i")
-    bld.addNonDirectedEdge("h", "i")
-
-    println(bld.build().bipart())
+    fun buildUnsafe(): Graph<V> {
+        return Graph(vertices_, edges_)
+    }
 }

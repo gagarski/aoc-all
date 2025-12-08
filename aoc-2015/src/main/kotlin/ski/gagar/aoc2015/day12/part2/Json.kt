@@ -1,8 +1,6 @@
 package ski.gagar.aoc2015.day12.part2
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import ski.gagar.aoc.util.getResourceAsStream
-import ski.gagar.aoc2015.day11.part1.nextCompliantPassword
+import tools.jackson.databind.ObjectMapper
 
 fun Any.traverseForInts(callable: (Int) -> Unit) {
     when (this) {
