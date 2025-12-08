@@ -5,6 +5,8 @@ import ski.gagar.aoc2025.day8.part1.Junction
 import ski.gagar.aoc2025.day8.part1.distance3
 import ski.gagar.aoc2025.day8.part1.parseJunctions
 import java.math.BigInteger
+import java.util.PriorityQueue
+import kotlin.collections.indices
 
 fun <V> GraphBuilder<V>.isSingleSegment(): Boolean {
     var visited = 0
@@ -15,19 +17,20 @@ fun <V> GraphBuilder<V>.isSingleSegment(): Boolean {
 }
 
 fun GraphBuilder<Junction>.connectTillSingle(): BigInteger {
-    val possibleConnections = vertices
-        .asSequence()
-        .flatMap { first ->
-            vertices
-                .asSequence()
-                .map {
-                        second -> first to second
+    val vList = vertices.toList()
+    val possibleConnections =
+        sequence {
+            for (i in vList.indices) {
+                for (j in (i + 1)..<vList.size) {
+                    yield(PossibleConnection(vList[i], vList[j]))
                 }
-                .filter { (first, second) -> first != second }
+            }
+        }.toList().let { list ->
+            PriorityQueue(list)
         }
-        .sortedBy { it.distance3() }
 
-    for (conn in possibleConnections) {
+    while (possibleConnections.isNotEmpty()) {
+        val conn = possibleConnections.poll()
         addEdge(conn.first, conn.second)
         addEdge(conn.second, conn.first)
 
