@@ -9,6 +9,7 @@ import ski.gagar.aoc2025.day5.Day5
 import ski.gagar.aoc2025.day6.Day6
 import ski.gagar.aoc2025.day7.Day7
 import ski.gagar.aoc2025.day8.Day8
+import ski.gagar.aoc2025.day9.Day9
 import kotlin.io.path.Path
 
 object Aoc2025 : Contest {
@@ -20,7 +21,8 @@ object Aoc2025 : Contest {
 //        Day5,
 //        Day6,
 //        Day7,
-        Day8,
+//        Day8,
+        Day9
     )
 }
 
