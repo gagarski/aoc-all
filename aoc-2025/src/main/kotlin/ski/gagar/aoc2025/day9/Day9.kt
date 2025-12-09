@@ -2,7 +2,7 @@ package ski.gagar.aoc2025.day9
 
 import ski.gagar.aoc.util.Puzzle
 import ski.gagar.aoc2025.day9.part1.biggestArea
-import ski.gagar.aoc2025.day9.part2.floodfill.biggestAreaGreenMapped
+import ski.gagar.aoc2025.day9.part2.biggestAreaGreenMapped
 import java.io.InputStream
 
 object Day9 : Puzzle {

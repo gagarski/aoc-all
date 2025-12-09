@@ -4,8 +4,8 @@ import ski.gagar.aoc.util.eachPairNoSwaps
 import ski.gagar.aoc2025.day9.part1.Seat
 import ski.gagar.aoc2025.day9.part1.parseSeats
 import java.math.BigInteger
-import java.util.NavigableMap
-import java.util.TreeMap
+import kotlin.minus
+import kotlin.plus
 
 val Pair<Seat, Seat>.isVerticalSide
     get() = first.column == second.column
@@ -34,31 +34,50 @@ data class Rectangle private constructor(val topLeft: Seat, val bottomRight: Sea
     val bottomLeft
         get() = Seat(bottomRight.row, topLeft.column)
 
-    fun borderSeats() = sequence {
+    fun allSeats() = sequence {
         var row = topLeft.row
-        var col = topLeft.column
+        while (row <= bottomRight.row) {
+            var col = topLeft.column
+            while (col <= bottomRight.column) {
+                yield(Seat(row, col))
+                col += BigInteger.ONE
+            }
+            row += BigInteger.ONE
+        }
+    }
 
-        while (true) {
-            yield(Seat(row, col))
-            if (col == bottomRight.column) break
+    fun borderSeats() = sequence {
+        val topRow = topLeft.row
+        val bottomRow = bottomRight.row
+        val leftColumn = topLeft.column
+        val rightColumn = bottomRight.column
+
+        var col = leftColumn
+        while (col <= rightColumn) {
+            yield(Seat(topRow, col))
             col += BigInteger.ONE
         }
 
-        while (true) {
-            yield(Seat(row, col))
-            if (row == bottomRight.row) break
+        var row = topRow + BigInteger.ONE
+        while (row <= bottomRow) {
+            yield(Seat(row, rightColumn))
             row += BigInteger.ONE
         }
 
-        while (true) {
-            col -= BigInteger.ONE
-            if (col == topLeft.column) break
-            yield(Seat(row, col))
+        if (bottomRow != topRow && rightColumn != leftColumn) {
+            col = rightColumn - BigInteger.ONE
+            while (col >= leftColumn) {
+                yield(Seat(bottomRow, col))
+                col -= BigInteger.ONE
+            }
         }
-        while (true) {
-            row -= BigInteger.ONE
-            if (row == topLeft.row + BigInteger.ONE) break
-            yield(Seat(row, col))
+
+        if (rightColumn != leftColumn && bottomRow != topRow) {
+            row = bottomRow - BigInteger.ONE
+            while (row >= topRow + BigInteger.ONE) {
+                yield(Seat(row, leftColumn))
+                row -= BigInteger.ONE
+            }
         }
     }
 
@@ -92,150 +111,155 @@ fun Pair<Seat, Seat>.seats() = sequence {
 
 }
 
-class MovieTheater(val redSeats: Set<Seat>) {
-    val width = redSeats.maxOf { it.column } + BigInteger.ONE
-    val height = redSeats.maxOf { it.row } + BigInteger.ONE
-
-    val sides = redSeats
-        .toList()
-        .eachPairNoSwaps()
-        .filter { it.isSide }
-        .toSet()
-
-    private val leftBorders: NavigableMap<BigInteger, BigInteger> = getLeftBorders()
-    private val rightBorders: NavigableMap<BigInteger, BigInteger> = getRightBorders()
-    private val topBorders: NavigableMap<BigInteger, BigInteger> = getTopBorders()
-    private val bottomBorders: NavigableMap<BigInteger, BigInteger> = getBottomBorders()
-
-
-    fun getLeftBorders(): NavigableMap<BigInteger, BigInteger> {
-        val res = TreeMap<BigInteger, BigInteger>()
-        for (side in sides.filter { it.isVerticalSide }) {
-            for (seat in side.seats()) {
-                val cur = res[seat.row]
-                if (null == cur || seat.column < cur) {
-                    res[seat.row] = seat.column
-                }
-            }
-        }
-        return res
-    }
-
-    fun getRightBorders(): NavigableMap<BigInteger, BigInteger> {
-        val res = TreeMap<BigInteger, BigInteger>()
-        for (side in sides.filter { it.isVerticalSide }) {
-            for (seat in side.seats()) {
-                val cur = res[seat.row]
-                if (null == cur || seat.column > cur) {
-                    res[seat.row] = seat.column
-                }
-            }
-        }
-        return res
-    }
-
-    fun getTopBorders(): NavigableMap<BigInteger, BigInteger> {
-        val res = TreeMap<BigInteger, BigInteger>()
-        for (side in sides.filter { it.isHorizontalSide }) {
-            for (seat in side.seats()) {
-                val cur = res[seat.column]
-                if (null == cur || seat.row < cur) {
-                    res[seat.column] = seat.row
-                }
-            }
-        }
-        return res
-    }
-
-    fun getBottomBorders(): NavigableMap<BigInteger, BigInteger> {
-        val res = TreeMap<BigInteger, BigInteger>()
-        for (side in sides.filter { it.isHorizontalSide }) {
-            for (seat in side.seats()) {
-                val cur = res[seat.column]
-                if (null == cur || seat.row > cur) {
-                    res[seat.column] = seat.row
-                }
-            }
-        }
-        return res
-    }
-
-    private fun Seat.isInside(): Boolean {
-        if (row !in BigInteger.ZERO..<height) return false
-        if (column !in BigInteger.ZERO..<width) return false
-
-        val minCol = leftBorders[row]
-        val maxCol = rightBorders[row]
-
-        if (minCol == null || maxCol == null) return false
-        if (column !in minCol..maxCol) return false
-
-        val minRow = topBorders[column]
-        val maxRow = bottomBorders[column]
-
-        if (minRow == null || maxRow == null) return false
-        if (row !in minRow..maxRow) return false
-
-        return true
-    }
-
-    fun isGreenOrRed(seat: Seat): Boolean = seat.isInside()
-    fun isRed(seat: Seat): Boolean = seat in redSeats
-    fun isGreen(seat: Seat): Boolean = isGreenOrRed(seat) && !isRed(seat)
-
-    fun fits(rect: Rectangle): Boolean {
-        val leftBorder = rect.topLeft.column
-        val topBorder = rect.topLeft.row
-        val rightBorder = rect.bottomRight.column
-        val bottomBorder = rect.bottomRight.row
-
-        if (this.leftBorders.subMap(topBorder, true, bottomBorder, true).any { it.value > leftBorder })
-            return false
-        if (this.rightBorders.subMap(topBorder, true, bottomBorder, true).any { it.value < rightBorder })
-            return false
-        if (this.topBorders.subMap(leftBorder, true, rightBorder, true).any { it.value > topBorder })
-            return false
-        if (this.bottomBorders.subMap(leftBorder, true, rightBorder, true).any { it.value < bottomBorder })
-            return false
-        return true
-    }
-
+enum class Color {
+    RED,
+    GREEN,
+    WHITE
 }
 
-fun draw(lines: Sequence<String>) = parseSeats(lines).let {
-    val theater = MovieTheater(it.toSet())
-    val str = buildString {
+class MovieTheater(redSeats: Set<Seat>) {
+    private val colMapping: Map<BigInteger, BigInteger> =
+        redSeats.asSequence().map { it.column }.sorted().toSet().asSequence().withIndex().associateBy({ it.value }, { it.index.toBigInteger() })
+    private val colMappingRev: Map<BigInteger, BigInteger> = colMapping.asSequence().associateBy({it.value}, {it.key})
+    private val rowMapping: Map<BigInteger, BigInteger> =
+        redSeats.asSequence().map { it.row }.sorted().toSet().asSequence().withIndex().associateBy({ it.value }, { it.index.toBigInteger() })
+    private val rowMappingRev: Map<BigInteger, BigInteger> = rowMapping.asSequence().associateBy({it.value}, {it.key})
+    val width: BigInteger
+    val height: BigInteger
+
+
+    private val map: Map<Seat, Color>
+    private val mappedRedSeats: List<Seat>
+
+    private fun Seat.toMapped() =
+        Seat(rowMapping[row]!!, colMapping[column]!!)
+    private fun Seat.toUnmapped() = Seat(rowMappingRev[row]!!, colMappingRev[column]!!)
+
+    init {
+        mappedRedSeats = redSeats.map { it.toMapped() }
+        width = mappedRedSeats.maxOf { it.column } + BigInteger.ONE
+        height = mappedRedSeats.maxOf { it.row } + BigInteger.ONE
+        var map = mappedRedSeats.associate { it to Color.RED }.toMutableMap()
+        val sides = mappedRedSeats
+            .toList()
+            .eachPairNoSwaps()
+            .filter { it.isSide }
+            .toSet()
+
+        for (side in sides) {
+            val pseudoRect = Rectangle(side.first, side.second)
+
+            for (border in pseudoRect.borderSeats()) {
+                if (map[border] != null) {
+                    continue
+                }
+                map[border] = Color.GREEN
+            }
+        }
+
+        val bigRect = Rectangle(
+            Seat(BigInteger.ZERO, BigInteger.ZERO),
+            Seat(height - BigInteger.ONE, width - BigInteger.ONE)
+        )
+
+        for (seat in bigRect.borderSeats()) {
+            floodFill(seat, map, Color.WHITE, null)
+        }
+
+        for (seat in bigRect.allSeats()) {
+            floodFill(seat, map, Color.GREEN, null)
+        }
+        this.map = map
+    }
+
+    fun Seat.isBorder() = row == BigInteger.ZERO || row == height - BigInteger.ONE ||
+            column == BigInteger.ZERO || column == width - BigInteger.ONE
+
+    fun Seat.isInside() = row in BigInteger.ZERO..<height && column in BigInteger.ZERO..<(width)
+
+    fun Seat.neighbors() = sequence {
+        val left = Seat(row, column - BigInteger.ONE)
+        if (left.isInside())
+            yield(left)
+        val right = Seat(row, column + BigInteger.ONE)
+        if (right.isInside())
+            yield(right)
+        val top = Seat(row - BigInteger.ONE, column)
+        if (top.isInside())
+            yield(top)
+        val bottom = Seat(row + BigInteger.ONE, column)
+        if (bottom.isInside())
+            yield(bottom)
+
+    }
+
+    fun biggestFittingRectangle(): BigInteger {
+        var biggestArea = BigInteger.ZERO
+        rects@for ((first, second) in mappedRedSeats.eachPairNoSwaps()) {
+            val rect = Rectangle(first, second)
+            val unmappedRect = Rectangle(first.toUnmapped(), second.toUnmapped())
+            val area = unmappedRect.area
+            if (area < biggestArea)
+                continue@rects
+            for (seat in rect.borderSeats()) {
+                if (map[seat] != Color.GREEN && map[seat] != Color.RED) {
+                    continue@rects
+                }
+            }
+            biggestArea = area
+        }
+        return biggestArea
+    }
+
+
+    private fun floodFill(init: Seat, map: MutableMap<Seat, Color>, color: Color, patternColor: Color?) {
+        val curColor = map[init]
+
+        if (curColor != patternColor) {
+            return
+        }
+        val queue = ArrayDeque<Seat>()
+        queue.addLast(init)
+
+
+        while (queue.isNotEmpty()) {
+            val toFill = queue.removeFirst()
+            val curColor = map[toFill]
+
+            if (curColor != patternColor) {
+                continue
+            }
+
+            map[toFill] = color
+
+            for (n in toFill.neighbors()) {
+                val nColor = map[n]
+                if (nColor != patternColor) {
+                    continue
+                }
+                queue.add(n)
+            }
+        }
+    }
+
+    override fun toString(): String = buildString {
         append("\n")
-        for (row in 0..<theater.height.toInt()) {
-            for (col in 0..<theater.width.toInt()) {
+        for (row in 0..<height.toInt()) {
+            for (col in 0..<width.toInt()) {
                 val seat = Seat(row.toBigInteger(), col.toBigInteger())
                 when {
-                    theater.isRed(seat) -> append('#')
-                    theater.isGreen(seat) -> append('X')
+                    map[seat] == Color.RED -> append('#')
+                    map[seat] == Color.GREEN -> append('X')
+                    map[seat] == Color.WHITE -> append('_')
                     else -> append('.')
                 }
             }
             append("\n")
         }
     }
-    str
 }
 
-fun biggestAreaGreen(lines: Sequence<String>): BigInteger = parseSeats(lines).let {
+fun biggestAreaGreenMapped(lines: Sequence<String>): BigInteger = parseSeats(lines).let {
     val mt = MovieTheater(it.toSet())
-    var biggestArea = BigInteger.ZERO
-    println("Different cols: ${mt.redSeats.map { it.column }.toSet().size}")
-    println("Different rows: ${mt.redSeats.map { it.row }.toSet().size}")
-    for (pair in mt.redSeats.toList().eachPairNoSwaps()) {
-        val rect = Rectangle(pair.first, pair.second)
-
-        if (rect.area < biggestArea) {
-            continue
-        }
-
-        if (!mt.fits(rect))
-            continue
-        biggestArea = rect.area
-    }
-    return biggestArea
+    mt.biggestFittingRectangle()
 }
