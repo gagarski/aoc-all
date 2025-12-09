@@ -4,6 +4,8 @@ import ski.gagar.aoc.util.eachPairNoSwaps
 import ski.gagar.aoc2025.day9.part1.Seat
 import ski.gagar.aoc2025.day9.part1.parseSeats
 import java.math.BigInteger
+import java.util.NavigableMap
+import java.util.TreeMap
 
 val Pair<Seat, Seat>.isVerticalSide
     get() = first.column == second.column
@@ -100,14 +102,14 @@ class MovieTheater(val redSeats: Set<Seat>) {
         .filter { it.isSide }
         .toSet()
 
-    private val leftBorders: Map<BigInteger, BigInteger> = getLeftBorders()
-    private val rightBorders: Map<BigInteger, BigInteger> = getRightBorders()
-    private val topBorders: Map<BigInteger, BigInteger> = getTopBorders()
-    private val bottomBorders: Map<BigInteger, BigInteger> = getBottomBorders()
+    private val leftBorders: NavigableMap<BigInteger, BigInteger> = getLeftBorders()
+    private val rightBorders: NavigableMap<BigInteger, BigInteger> = getRightBorders()
+    private val topBorders: NavigableMap<BigInteger, BigInteger> = getTopBorders()
+    private val bottomBorders: NavigableMap<BigInteger, BigInteger> = getBottomBorders()
 
 
-    fun getLeftBorders(): Map<BigInteger, BigInteger> {
-        val res = mutableMapOf<BigInteger, BigInteger>()
+    fun getLeftBorders(): NavigableMap<BigInteger, BigInteger> {
+        val res = TreeMap<BigInteger, BigInteger>()
         for (side in sides.filter { it.isVerticalSide }) {
             for (seat in side.seats()) {
                 val cur = res[seat.row]
@@ -119,8 +121,8 @@ class MovieTheater(val redSeats: Set<Seat>) {
         return res
     }
 
-    fun getRightBorders(): Map<BigInteger, BigInteger> {
-        val res = mutableMapOf<BigInteger, BigInteger>()
+    fun getRightBorders(): NavigableMap<BigInteger, BigInteger> {
+        val res = TreeMap<BigInteger, BigInteger>()
         for (side in sides.filter { it.isVerticalSide }) {
             for (seat in side.seats()) {
                 val cur = res[seat.row]
@@ -132,8 +134,8 @@ class MovieTheater(val redSeats: Set<Seat>) {
         return res
     }
 
-    fun getTopBorders(): Map<BigInteger, BigInteger> {
-        val res = mutableMapOf<BigInteger, BigInteger>()
+    fun getTopBorders(): NavigableMap<BigInteger, BigInteger> {
+        val res = TreeMap<BigInteger, BigInteger>()
         for (side in sides.filter { it.isHorizontalSide }) {
             for (seat in side.seats()) {
                 val cur = res[seat.column]
@@ -145,8 +147,8 @@ class MovieTheater(val redSeats: Set<Seat>) {
         return res
     }
 
-    fun getBottomBorders(): Map<BigInteger, BigInteger> {
-        val res = mutableMapOf<BigInteger, BigInteger>()
+    fun getBottomBorders(): NavigableMap<BigInteger, BigInteger> {
+        val res = TreeMap<BigInteger, BigInteger>()
         for (side in sides.filter { it.isHorizontalSide }) {
             for (seat in side.seats()) {
                 val cur = res[seat.column]
@@ -181,6 +183,23 @@ class MovieTheater(val redSeats: Set<Seat>) {
     fun isRed(seat: Seat): Boolean = seat in redSeats
     fun isGreen(seat: Seat): Boolean = isGreenOrRed(seat) && !isRed(seat)
 
+    fun fits(rect: Rectangle): Boolean {
+        val leftBorder = rect.topLeft.column
+        val topBorder = rect.topLeft.row
+        val rightBorder = rect.bottomRight.column
+        val bottomBorder = rect.bottomRight.row
+
+        if (this.leftBorders.subMap(topBorder, true, bottomBorder, true).any { it.value > leftBorder })
+            return false
+        if (this.rightBorders.subMap(topBorder, true, bottomBorder, true).any { it.value < rightBorder })
+            return false
+        if (this.topBorders.subMap(leftBorder, true, rightBorder, true).any { it.value > topBorder })
+            return false
+        if (this.bottomBorders.subMap(leftBorder, true, rightBorder, true).any { it.value < bottomBorder })
+            return false
+        return true
+    }
+
 }
 
 fun draw(lines: Sequence<String>) = parseSeats(lines).let {
@@ -205,7 +224,6 @@ fun draw(lines: Sequence<String>) = parseSeats(lines).let {
 fun biggestAreaGreen(lines: Sequence<String>): BigInteger = parseSeats(lines).let {
     val mt = MovieTheater(it.toSet())
     var biggestArea = BigInteger.ZERO
-    var i = 0
     for (pair in mt.redSeats.toList().eachPairNoSwaps()) {
         val rect = Rectangle(pair.first, pair.second)
 
@@ -213,10 +231,8 @@ fun biggestAreaGreen(lines: Sequence<String>): BigInteger = parseSeats(lines).le
             continue
         }
 
-        if (rect.borderSeats().any { !mt.isGreenOrRed(it) }) {
+        if (!mt.fits(rect))
             continue
-        }
-        println(rect)
         biggestArea = rect.area
     }
     return biggestArea
