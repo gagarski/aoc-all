@@ -224,6 +224,8 @@ fun draw(lines: Sequence<String>) = parseSeats(lines).let {
 fun biggestAreaGreen(lines: Sequence<String>): BigInteger = parseSeats(lines).let {
     val mt = MovieTheater(it.toSet())
     var biggestArea = BigInteger.ZERO
+    println("Different cols: ${mt.redSeats.map { it.column }.toSet().size}")
+    println("Different rows: ${mt.redSeats.map { it.row }.toSet().size}")
     for (pair in mt.redSeats.toList().eachPairNoSwaps()) {
         val rect = Rectangle(pair.first, pair.second)
 
