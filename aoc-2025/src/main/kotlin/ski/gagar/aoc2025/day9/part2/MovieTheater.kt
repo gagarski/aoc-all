@@ -7,14 +7,6 @@ import java.math.BigInteger
 import kotlin.minus
 import kotlin.plus
 
-val Pair<Seat, Seat>.isVerticalSide
-    get() = first.column == second.column
-
-val Pair<Seat, Seat>.isHorizontalSide
-    get() = first.row == second.row
-
-val Pair<Seat, Seat>.isSide
-    get() = isVerticalSide || isHorizontalSide
 
 @ConsistentCopyVisibility
 data class Rectangle private constructor(val topLeft: Seat, val bottomRight: Seat) {
@@ -92,24 +84,6 @@ data class Rectangle private constructor(val topLeft: Seat, val bottomRight: Sea
     }
 }
 
-fun Pair<Seat, Seat>.seats() = sequence {
-    require(isSide)
-    val minRow = minOf(first.row, second.row)
-    val maxRow = maxOf(first.row, second.row)
-    val minCol = minOf(first.column, second.column)
-    val maxCol = maxOf(first.column, second.column)
-
-    var row = minRow
-    while (row <= maxRow) {
-        var col = minCol
-        while (col <= maxCol) {
-            yield(Seat(row, col))
-            col += BigInteger.ONE
-        }
-        row += BigInteger.ONE
-    }
-
-}
 
 enum class Color {
     RED,
@@ -141,10 +115,12 @@ class MovieTheater(redSeats: Set<Seat>) {
         height = mappedRedSeats.maxOf { it.row } + BigInteger.ONE
         var map = mappedRedSeats.associate { it to Color.RED }.toMutableMap()
         val sides = mappedRedSeats
-            .toList()
-            .eachPairNoSwaps()
-            .filter { it.isSide }
-            .toSet()
+            .asSequence()
+            .windowed(2)
+            .map {
+                it[0] to it[1]
+            } + sequenceOf(mappedRedSeats.last() to mappedRedSeats.first())
+
 
         for (side in sides) {
             val pseudoRect = Rectangle(side.first, side.second)
