@@ -93,10 +93,10 @@ enum class Color {
 
 class MovieTheater(redSeats: Set<Seat>) {
     private val colMapping: Map<BigInteger, BigInteger> =
-        redSeats.asSequence().map { it.column }.sorted().toSet().asSequence().withIndex().associateBy({ it.value }, { it.index.toBigInteger() })
+        redSeats.asSequence().map { it.column }.sorted().toSet().asSequence().withIndex().associateBy({ it.value }, { (it.index * 2).toBigInteger() })
     private val colMappingRev: Map<BigInteger, BigInteger> = colMapping.asSequence().associateBy({it.value}, {it.key})
     private val rowMapping: Map<BigInteger, BigInteger> =
-        redSeats.asSequence().map { it.row }.sorted().toSet().asSequence().withIndex().associateBy({ it.value }, { it.index.toBigInteger() })
+        redSeats.asSequence().map { it.row }.sorted().toSet().asSequence().withIndex().associateBy({ it.value }, { (it.index * 2).toBigInteger() })
     private val rowMappingRev: Map<BigInteger, BigInteger> = rowMapping.asSequence().associateBy({it.value}, {it.key})
     val width: BigInteger
     val height: BigInteger
