@@ -16,6 +16,7 @@ data class LinearEquationSystem(val equations: List<LinearEquation>) {
 
     constructor(vararg equations: LinearEquation) : this(equations.toList())
 
+
     fun combine(other: LinearEquationSystem) =
         LinearEquationSystem(this.equations + other.equations)
 

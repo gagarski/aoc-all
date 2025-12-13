@@ -1,7 +1,10 @@
 package ski.gagar.aoc2025
 
+import Day10
 import ski.gagar.aoc.util.Contest
 import ski.gagar.aoc2025.day1.Day1
+import ski.gagar.aoc2025.day11.Day11
+import ski.gagar.aoc2025.day12.Day12
 import ski.gagar.aoc2025.day2.Day2
 import ski.gagar.aoc2025.day3.Day3
 import ski.gagar.aoc2025.day4.Day4
@@ -22,7 +25,10 @@ object Aoc2025 : Contest {
 //        Day6,
 //        Day7,
 //        Day8,
-        Day9
+//        Day9,
+//        Day10,
+//        Day11,
+        Day12
     )
 }
 
